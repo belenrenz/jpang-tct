@@ -1,0 +1,27 @@
+{
+  "name": "Traffic Citation Ticket - LGU Jose Panganiban",
+  "short_name": "TCT JPang",
+  "description": "Traffic Citation Ticket System ng LGU Jose Panganiban, Camarines Norte",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#002366",
+  "theme_color": "#002366",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["government", "utilities"],
+  "lang": "fil",
+  "dir": "ltr"
+}
