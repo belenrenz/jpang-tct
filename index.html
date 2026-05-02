@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#003087">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TCT JPang">
+<meta name="description" content="Traffic Citation Ticket - LGU Jose Panganiban">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.png">
+<title>Traffic Citation Ticket — LGU Jose Panganiban</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #002366;
+    --gold: #C9A84C;
+    --gold-light: #F0D080;
+    --red: #CC1122;
+    --white: #FAFAF8;
+    --gray: #6B7280;
+    --light: #EEF1F7;
+    --border: #B0B8CC;
+    --success: #166534;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--light);
+    color: #111;
+    min-height: 100vh;
+  }
+
+  /* ===== APP HEADER ===== */
+  .app-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #001a4d 100%);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  .app-header .seal {
+    width: 48px; height: 48px;
+    background: radial-gradient(circle, var(--gold) 0%, #8B6914 100%);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+    border: 2px solid var(--gold-light);
+  }
+  .app-header .title-block h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: 15px; line-height: 1.2;
+    color: var(--gold-light);
+  }
+  .app-header .title-block p {
+    font-size: 10px; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .header-right {
+    margin-left: auto;
+    display: flex; gap: 8px;
+  }
+  .btn-icon {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white; border-radius: 8px;
+    padding: 6px 10px; font-size: 18px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .btn-icon:hover { background: rgba(255,255,255,0.25); }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex;
+    background: var(--navy);
+    border-bottom: 3px solid var(--gold);
+  }
+  .tab {
+    flex: 1; padding: 10px 4px;
+    text-align: center; color: rgba(255,255,255,0.6);
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.3px; cursor: pointer;
+    transition: all 0.2s; border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+  }
+  .tab.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+  .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; padding: 16px; }
+  .screen.active { display: block; }
+
+  /* ===== FORM CARD ===== */
+  .form-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,35,102,0.12);
+    margin-bottom: 16px;
+  }
+  .form-card-header {
+    background: linear-gradient(90deg, var(--navy), #003580);
+    color: white;
+    padding: 10px 16px;
+    font-family: 'IM Fell English', serif;
+    font-size: 13px;
+    border-left: 4px solid var(--gold);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-card-body { padding: 14px 16px; }
+
+  /* ===== OFFICIAL TICKET HEADER ===== */
+  .ticket-official-header {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(0,35,102,0.12);
+    border-top: 5px solid var(--navy);
+    border-bottom: 3px solid var(--gold);
+    position: relative;
+  }
+  .ticket-official-header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: repeating-linear-gradient(90deg, var(--navy) 0px, var(--navy) 6px, var(--gold) 6px, var(--gold) 8px);
+  }
+  .official-seals {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .seal-circle {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f5e6c0, #c9a84c);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    border: 2px solid var(--navy);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .official-text { flex: 1; padding: 0 8px; }
+  .official-text .republic { font-size: 9px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+  .official-text .province { font-size: 10px; color: var(--navy); font-weight: 600; }
+  .official-text .municipality { font-size: 10px; color: var(--navy); }
+  .official-text .station { font-size: 11px; font-weight: 700; color: var(--navy); text-transform: uppercase; }
+  .ticket-title-banner {
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: 'IM Fell English', serif;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    margin-top: 8px;
+  }
+  .tct-row {
+    display: flex; gap: 12px; margin-top: 8px;
+  }
+  .tct-field {
+    flex: 1; text-align: left;
+  }
+  .tct-field label { font-size: 9px; color: var(--gray); text-transform: uppercase; display: block; }
+  .tct-field span { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .tct-no-display {
+    font-size: 22px; font-weight: 700; color: var(--red);
+    background: #fff5f5;
+    border: 2px dashed var(--red);
+    border-radius: 6px; padding: 4px 12px;
+    align-self: center;
+  }
+
+  /* ===== FORM FIELDS ===== */
+  .field-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .field-group { flex: 1; }
+  .field-group label {
+    display: block; font-size: 10px; font-weight: 700;
+    color: var(--navy); text-transform: uppercase;
+    letter-spacing: 0.3px; margin-bottom: 4px;
+  }
+  .field-group input, .field-group select {
+    width: 100%; padding: 9px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 13px;
+    font-family: 'Source Sans 3', sans-serif;
+    background: #FAFCFF;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .field-group input:focus, .field-group select:focus {
+    outline: none; border-color: var(--navy);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0,35,102,0.1);
+  }
+  .field-group.full { flex: 100%; }
+  
+  /* ===== VIOLATIONS GRID ===== */
+  .violations-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .violation-item {
+    display: flex; align-items: flex-start; gap: 6px;
+    padding: 7px 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #FAFCFF;
+    font-size: 11px; line-height: 1.3;
+  }
+  .violation-item:active { transform: scale(0.97); }
+  .violation-item.checked {
+    background: #EEF3FF;
+    border-color: var(--navy);
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .violation-item input[type="checkbox"] {
+    width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px;
+    accent-color: var(--navy);
+  }
+  .v-full { grid-column: 1 / -1; }
+
+  /* ===== BUTTONS ===== */
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--navy), #003580);
+    color: white; border: none; border-radius: 10px;
+    padding: 14px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: 'Source Sans 3', sans-serif;
+    box-shadow: 0 4px 12px rgba(0,35,102,0.3);
+    margin-bottom: 10px;
+  }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-danger {
+    background: linear-gradient(135deg, var(--red), #990011);
+    box-shadow: 0 4px 12px rgba(204,17,34,0.3);
+  }
+  .btn-success {
+    background: linear-gradient(135deg, #166534, #14532d);
+    box-shadow: 0 4px 12px rgba(22,101,52,0.3);
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), #8B6914);
+    color: #111;
+    box-shadow: 0 4px 12px rgba(201,168,76,0.3);
+  }
+
+  /* ===== RECORDS LIST ===== */
+  .record-card {
+    background: white;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,35,102,0.08);
+    border-left: 4px solid var(--navy);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .record-card:active { transform: scale(0.98); }
+  .record-card .rec-tct { font-size: 11px; color: var(--gray); }
+  .record-card .rec-name { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .record-card .rec-date { font-size: 12px; color: var(--gray); }
+  .record-card .rec-violations {
+    margin-top: 6px;
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .violation-badge {
+    background: #EEF3FF; color: var(--navy);
+    font-size: 9px; font-weight: 600;
+    padding: 2px 7px; border-radius: 20px;
+    border: 1px solid #C7D2EE;
+  }
+  .record-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-small {
+    flex: 1; padding: 8px;
+    border: none; border-radius: 7px;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .btn-sm-view { background: var(--light); color: var(--navy); }
+  .btn-sm-print { background: var(--navy); color: white; }
+  .btn-sm-del { background: #FEE2E2; color: var(--red); }
+
+  /* ===== PAID / UNPAID BADGE ===== */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 800;
+    padding: 3px 10px; border-radius: 20px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .status-unpaid { background: #FEE2E2; color: #991B1B; border: 1.5px solid #FCA5A5; }
+  .status-paid { background: #DCFCE7; color: #166534; border: 1.5px solid #86EFAC; }
+  .btn-sm-paid { background: #DCFCE7; color: #166534; border: 1.5px solid #86EFAC; }
+  .btn-sm-unpaid { background: #FEE2E2; color: #991B1B; border: 1.5px solid #FCA5A5; }
+  .filter-pills { display: flex; gap: 8px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 2px; }
+  .filter-pill {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    border: 1.5px solid var(--border); background: white; color: var(--gray);
+    transition: all 0.15s;
+  }
+  .filter-pill.active { background: var(--navy); color: white; border-color: var(--navy); }
+  .filter-pill.pill-unpaid.active { background: #991B1B; border-color: #991B1B; }
+  .filter-pill.pill-paid.active { background: #166534; border-color: #166534; }
+
+  /* ===== PRINT PREVIEW ===== */
+  .print-overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 999; overflow-y: auto; padding: 20px;
+  }
+  .print-overlay.open { display: block; }
+  .print-doc {
+    background: white; max-width: 400px;
+    margin: 0 auto; padding: 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    border: 2px solid var(--border);
+    position: relative;
+  }
+  .print-header { text-align: center; margin-bottom: 8px; }
+  .print-title {
+    font-family: 'IM Fell English', serif;
+    font-size: 15px; font-weight: bold;
+    color: var(--navy); text-align: center;
+    text-transform: uppercase; border: 2px solid var(--navy);
+    padding: 4px; margin: 6px 0;
+  }
+  .print-row {
+    display: flex; border-bottom: 1px solid #ddd; margin-bottom: 4px;
+    padding-bottom: 4px; gap: 8px;
+  }
+  .print-row label { font-weight: 700; white-space: nowrap; color: var(--navy); }
+  .print-row span { flex: 1; }
+  .print-violations-header {
+    font-weight: 700; text-align: center;
+    background: var(--navy); color: white;
+    padding: 3px; margin: 6px 0; font-size: 9px;
+  }
+  .print-viol-list { column-count: 2; column-gap: 8px; font-size: 9px; }
+  .print-viol-item { break-inside: avoid; padding: 1px 0; }
+  .print-viol-item.checked { font-weight: 700; }
+  .print-checkbox { width: 8px; height: 8px; border: 1px solid #333; display: inline-block; text-align: center; line-height: 8px; font-size: 7px; margin-right: 3px; }
+  .print-sig-row { display: flex; margin-top: 16px; gap: 20px; }
+  .print-sig-block { flex: 1; text-align: center; }
+  .print-sig-line { border-top: 1px solid #333; margin-bottom: 3px; margin-top: 24px; }
+  .print-footer-note { font-size: 8px; color: #555; margin-top: 8px; border: 1px solid #ddd; padding: 6px; }
+  .print-copy-row { display: flex; border-top: 2px solid var(--navy); margin-top: 8px; font-size: 8px; }
+  .print-copy-item { flex: 1; padding: 3px; border-right: 1px solid var(--navy); text-align: center; }
+  .print-copy-item:last-child { border-right: none; }
+
+  /* ===== STATS ===== */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-box {
+    background: white; border-radius: 10px; padding: 14px;
+    text-align: center; box-shadow: 0 2px 8px rgba(0,35,102,0.1);
+    border-top: 3px solid var(--navy);
+  }
+  .stat-box .num { font-size: 32px; font-weight: 700; color: var(--navy); }
+  .stat-box .lbl { font-size: 10px; color: var(--gray); text-transform: uppercase; }
+  .stat-box.gold { border-top-color: var(--gold); }
+  .stat-box.red { border-top-color: var(--red); }
+  .stat-box.green { border-top-color: var(--success); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+    background: var(--navy); color: white; padding: 10px 20px;
+    border-radius: 20px; font-size: 13px; font-weight: 600;
+    z-index: 9999; opacity: 0; transition: opacity 0.3s;
+    white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .toast.show { opacity: 1; }
+
+  /* ===== SEARCH ===== */
+  .search-box {
+    display: flex; gap: 8px; margin-bottom: 12px;
+  }
+  .search-box input {
+    flex: 1; padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 13px;
+    font-family: 'Source Sans 3', sans-serif;
+    background: white;
+  }
+  .search-box input:focus { outline: none; border-color: var(--navy); }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* ===== PRINT CLOSE BTN ===== */
+  .print-close-bar {
+    display: flex; gap: 8px; max-width: 400px; margin: 0 auto 16px;
+  }
+  .btn-close-print, .btn-do-print {
+    flex: 1; padding: 12px;
+    border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Source Sans 3', sans-serif;
+  }
+  .btn-close-print { background: #374151; color: white; }
+  .btn-do-print { background: var(--gold); color: #111; }
+
+  @media print {
+    body > *:not(.print-overlay) { display: none !important; }
+    .print-overlay { background: white !important; padding: 0 !important; }
+    .print-close-bar { display: none !important; }
+    .print-doc { border: none !important; margin: 0; padding: 8px; }
+  }
+
+  /* Install prompt */
+  .install-banner {
+    background: linear-gradient(90deg, var(--gold), #8B6914);
+    color: #111; padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; font-weight: 600;
+  }
+  .install-banner button {
+    background: var(--navy); color: white; border: none;
+    border-radius: 6px; padding: 6px 12px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  #installBanner { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Install Banner -->
+<div id="installBanner" class="install-banner">
+  <span>📲 I-install ang app sa iyong Android</span>
+  <button onclick="installApp()">I-INSTALL</button>
+</div>
+
+<!-- App Header -->
+<header class="app-header">
+  <div class="seal">⚖️</div>
+  <div class="title-block">
+    <h1>Traffic Citation Ticket</h1>
+    <p>LGU Jose Panganiban · Camarines Norte</p>
+  </div>
+  <div class="header-right">
+    <button class="btn-icon" onclick="exportData()" title="I-export">📤</button>
+  </div>
+</header>
+
+<!-- Tabs -->
+<nav class="tabs">
+  <div class="tab active" onclick="showTab('new')">
+    <span class="tab-icon">📝</span>BAGONG TCT
+  </div>
+  <div class="tab" onclick="showTab('records')">
+    <span class="tab-icon">🗂️</span>MGA RECORD
+  </div>
+  <div class="tab" onclick="showTab('stats')">
+    <span class="tab-icon">📊</span>ULAT
+  </div>
+</nav>
+
+<!-- ===== NEW TICKET SCREEN ===== -->
+<div id="screen-new" class="screen active">
+
+  <!-- Official Header -->
+  <div class="ticket-official-header">
+    <div class="official-seals">
+      <div class="seal-circle">🛡️</div>
+      <div class="official-text">
+        <div class="republic">Republic of the Philippines</div>
+        <div class="province">Province of Camarines Norte</div>
+        <div class="municipality">Municipality of Jose Panganiban</div>
+        <div class="station">Jose Panganiban Municipal Police Station</div>
+      </div>
+      <div class="seal-circle">🏛️</div>
+    </div>
+    <div class="ticket-title-banner">TRAFFIC CITATION TICKET</div>
+    <div class="tct-row">
+      <div class="tct-field">
+        <label>TCT No.</label>
+        <span id="tct-display" style="color:var(--red);font-size:20px;font-weight:700;">—</span>
+      </div>
+      <div class="tct-field">
+        <label>Date</label>
+        <span id="date-display">—</span>
+      </div>
+      <div class="tct-field">
+        <label>Time</label>
+        <span id="time-display">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCT & Date/Time -->
+  <div class="form-card">
+    <div class="form-card-header">🔢 Impormasyon ng Ticket</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>TCT No. *</label>
+          <input type="number" id="tct_no" placeholder="8201" oninput="updateHeader()">
+        </div>
+        <div class="field-group">
+          <label>Petsa *</label>
+          <input type="date" id="date" oninput="updateHeader()">
+        </div>
+        <div class="field-group">
+          <label>Oras *</label>
+          <input type="time" id="time" oninput="updateHeader()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Info -->
+  <div class="form-card">
+    <div class="form-card-header">👤 Personal na Impormasyon</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>Pangalan (First) *</label>
+          <input type="text" id="first_name" placeholder="Darwin">
+        </div>
+        <div class="field-group">
+          <label>Gitnang Pangalan</label>
+          <input type="text" id="middle_name" placeholder="M.">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Apelyido (Last) *</label>
+          <input type="text" id="last_name" placeholder="Rapa">
+        </div>
+        <div class="field-group">
+          <label>Petsa ng Kapanganakan</label>
+          <input type="date" id="birth_date">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group full">
+          <label>Address (House No./Street/Barangay/Municipality/Province)</label>
+          <input type="text" id="address" placeholder="Canipa, Kosa, Norte (P-6)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle Info -->
+  <div class="form-card">
+    <div class="form-card-header">🏍️ Impormasyon ng Sasakyan</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>License No.</label>
+          <input type="text" id="license_no" placeholder="N/A" style="text-transform:uppercase">
+        </div>
+        <div class="field-group">
+          <label>Plate No.</label>
+          <input type="text" id="plate_no" placeholder="EZ-TUD" style="text-transform:uppercase">
+        </div>
+        <div class="field-group">
+          <label>Uri ng Sasakyan</label>
+          <select id="vehicle_type">
+            <option value="MC">MC (Motorsiklo)</option>
+            <option value="CAR">CAR (Sasakyan)</option>
+            <option value="TRI">TRI (Tricycle)</option>
+            <option value="JEEP">JEEP</option>
+            <option value="BUS">BUS</option>
+            <option value="TRUCK">TRUCK</option>
+            <option value="VAN">VAN</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Registered Owner</label>
+          <input type="text" id="reg_owner" placeholder="(kung iba sa driver)">
+        </div>
+        <div class="field-group">
+          <label>Address ng Owner</label>
+          <input type="text" id="owner_address" placeholder="Address">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Violations -->
+  <div class="form-card">
+    <div class="form-card-header">⚠️ Mga Paglabag sa Trapiko</div>
+    <div class="form-card-body">
+      <div class="violations-grid" id="violations-grid">
+        <!-- filled by JS -->
+      </div>
+      <div style="margin-top:10px">
+        <div class="field-group">
+          <label>Iba pa (Others)</label>
+          <input type="text" id="others_viol" placeholder="Isulat dito ang ibang paglabag...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Officer -->
+  <div class="form-card">
+    <div class="form-card-header">👮 Impormasyon ng Pulis</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>Apprehending Officer *</label>
+          <input type="text" id="officer_name" placeholder="Pangalan ng Pulis">
+        </div>
+        <div class="field-group">
+          <label>Badge / ID No.</label>
+          <input type="text" id="officer_badge" placeholder="Badge No.">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <button class="btn-primary" onclick="saveTicket()">
+    💾 I-SAVE ANG TICKET
+  </button>
+  <button class="btn-primary btn-gold" onclick="clearForm()">
+    🗑️ LINISIN ANG FORM
+  </button>
+
+</div>
+
+<!-- ===== RECORDS SCREEN ===== -->
+<div id="screen-records" class="screen">
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="🔍 Hanapin sa pangalan o TCT No..." oninput="renderRecords()">
+  </div>
+  <div class="filter-pills">
+    <div class="filter-pill active" onclick="setFilter('all',this)">📋 Lahat</div>
+    <div class="filter-pill pill-unpaid" onclick="setFilter('unpaid',this)">🔴 Hindi pa Bayad</div>
+    <div class="filter-pill pill-paid" onclick="setFilter('paid',this)">✅ Bayad na</div>
+  </div>
+  <div id="records-list"></div>
+</div>
+
+<!-- ===== STATS SCREEN ===== -->
+<div id="screen-stats" class="screen">
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="num" id="stat-total">0</div>
+      <div class="lbl">Kabuuang Tickets</div>
+    </div>
+    <div class="stat-box gold">
+      <div class="num" id="stat-today">0</div>
+      <div class="lbl">Ngayon</div>
+    </div>
+    <div class="stat-box red">
+      <div class="num" id="stat-week">0</div>
+      <div class="lbl">Linggong Ito</div>
+    </div>
+    <div class="stat-box green">
+      <div class="num" id="stat-month">0</div>
+      <div class="lbl">Buwang Ito</div>
+    </div>
+    <div class="stat-box red">
+      <div class="num" id="stat-unpaid">0</div>
+      <div class="lbl">🔴 Hindi pa Bayad</div>
+    </div>
+    <div class="stat-box green">
+      <div class="num" id="stat-paid">0</div>
+      <div class="lbl">✅ Bayad na</div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-header">📋 Pinaka-Madalas na Paglabag</div>
+    <div class="form-card-body">
+      <div id="top-violations"></div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-header">🏍️ Uri ng Sasakyan</div>
+    <div class="form-card-body">
+      <div id="vehicle-stats"></div>
+    </div>
+  </div>
+
+  <button class="btn-primary btn-danger" onclick="clearAllData()">
+    🗑️ BURAHIN LAHAT NG DATA
+  </button>
+</div>
+
+<!-- ===== PRINT OVERLAY ===== -->
+<div id="printOverlay" class="print-overlay">
+  <div class="print-close-bar">
+    <button class="btn-close-print" onclick="closePrint()">✕ ISARA</button>
+    <button class="btn-do-print" onclick="window.print()">🖨️ I-PRINT</button>
+  </div>
+  <div class="print-doc" id="printDoc"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== VIOLATIONS LIST =====
+const VIOLATIONS = [
+  "Driving without License",
+  "Driving with Expired License / Registration",
+  "Failure to Carry Driver's License",
+  "Driving while under the Influence of Liquor or Prohibited Drugs",
+  "Fake License / ID and Permit",
+  "Allowing another person to use his license",
+  "Drivers with Student's Driver Operating a motor vehicle not accompanied by Professional Driver",
+  "Failure to carry Certificate of Registration and Official Receipt",
+  "Dirty or Unclear Plates",
+  "Inconspicuously / improperly Displayed Plates",
+  "No Sticker of Current Registration",
+  "Tampered / Marked Plates / Stickers",
+  "No Headlights or No Defective Headlights",
+  "No Yellow Lights or Defective Tail Lights",
+  "No Rear / No Stop Lights",
+  "No Brake Lights",
+  "No Side Mirror",
+  "No Signal Lights",
+  "Dirty and Unsightly Dilapidated Motor Vehicle",
+  "Unauthorized Improvised Plates",
+  "Excess Passenger/Load (beyond the seating capacity)",
+  "Colorum Operation (Driver / Owner)",
+  "Employing Insolent, Discourteous or Arrogant Drivers",
+  "Refusal to convey passengers to proper destination / trip cutting",
+  "Refusal to render service to public",
+  "No Franchise / Certificate to Public Conveyance or Provisional Authority Carried",
+  "Allowing passengers on Top of the Tricycle",
+  "Permitting Passengers to Ride on Running Board, Step Board",
+  "Disregarding Traffic Signs",
+  "Reckless Driving",
+  "Driving in Slippers / Sleeveless",
+  "Driving or Parking on a place not for Traffic or Parking",
+  "Hitching",
+  "Modified Pipes / Mufflers",
+  "Use of LED Lights with Blinker Mode",
+  "Not Wearing Safety Helmet",
+  "Over Speeding (more than 20 km/hr.)",
+  "Unregistered Motor Vehicle",
+  "Fake OR/Plates/Tags or Stickers/Spurious Documents",
+];
+
+// ===== STORAGE =====
+function getTickets() {
+  try { return JSON.parse(localStorage.getItem('jpang_tct') || '[]'); } catch { return []; }
+}
+function saveTickets(arr) {
+  localStorage.setItem('jpang_tct', JSON.stringify(arr));
+}
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  buildViolationsGrid();
+  setDefaultDateTime();
+  updateHeader();
+  renderRecords();
+  renderStats();
+});
+
+function setDefaultDateTime() {
+  const now = new Date();
+  document.getElementById('date').value = now.toISOString().split('T')[0];
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('time').value = `${hh}:${mm}`;
+  
+  // Auto TCT no: next after last
+  const tickets = getTickets();
+  if (tickets.length > 0) {
+    const maxTct = Math.max(...tickets.map(t => parseInt(t.tct_no)||0));
+    document.getElementById('tct_no').value = maxTct + 1;
+  }
+  updateHeader();
+}
+
+function buildViolationsGrid() {
+  const grid = document.getElementById('violations-grid');
+  grid.innerHTML = VIOLATIONS.map((v, i) => `
+    <div class="violation-item" id="vitem-${i}" onclick="toggleViol(${i})">
+      <input type="checkbox" id="v${i}" onclick="e=>e.stopPropagation()">
+      <span>${v}</span>
+    </div>
+  `).join('');
+}
+
+function toggleViol(i) {
+  const cb = document.getElementById(`v${i}`);
+  cb.checked = !cb.checked;
+  document.getElementById(`vitem-${i}`).classList.toggle('checked', cb.checked);
+}
+
+function updateHeader() {
+  const tct = document.getElementById('tct_no').value;
+  const date = document.getElementById('date').value;
+  const time = document.getElementById('time').value;
+  document.getElementById('tct-display').textContent = tct || '—';
+  document.getElementById('date-display').textContent = date ? formatDate(date) : '—';
+  document.getElementById('time-display').textContent = time ? formatTime(time) : '—';
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  return `${m}-${day}-${y.slice(2)}`;
+}
+function formatTime(t) {
+  if (!t) return '';
+  const [h,m] = t.split(':');
+  const hr = parseInt(h);
+  return `${hr > 12 ? hr-12 : hr || 12}:${m}${hr >= 12 ? 'PM' : 'AM'}`;
+}
+
+// ===== TABS =====
+function showTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`screen-${tab}`).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (tab === 'records') renderRecords();
+  if (tab === 'stats') renderStats();
+}
+
+// ===== SAVE TICKET =====
+function saveTicket() {
+  const tct_no = document.getElementById('tct_no').value.trim();
+  const date = document.getElementById('date').value;
+  const time = document.getElementById('time').value;
+  const first = document.getElementById('first_name').value.trim();
+  const last = document.getElementById('last_name').value.trim();
+  const officer = document.getElementById('officer_name').value.trim();
+
+  if (!tct_no || !date || !first || !last || !officer) {
+    showToast('⚠️ Punan ang lahat ng required fields!');
+    return;
+  }
+
+  const violations = VIOLATIONS.filter((_, i) => document.getElementById(`v${i}`)?.checked);
+  const others = document.getElementById('others_viol').value.trim();
+  if (violations.length === 0 && !others) {
+    showToast('⚠️ Pumili ng kahit isang paglabag!');
+    return;
+  }
+
+  const ticket = {
+    id: Date.now(),
+    tct_no, date, time,
+    first_name: first,
+    middle_name: document.getElementById('middle_name').value.trim(),
+    last_name: last,
+    birth_date: document.getElementById('birth_date').value,
+    address: document.getElementById('address').value.trim(),
+    license_no: document.getElementById('license_no').value.trim(),
+    plate_no: document.getElementById('plate_no').value.trim().toUpperCase(),
+    vehicle_type: document.getElementById('vehicle_type').value,
+    reg_owner: document.getElementById('reg_owner').value.trim(),
+    owner_address: document.getElementById('owner_address').value.trim(),
+    officer_name: officer,
+    officer_badge: document.getElementById('officer_badge').value.trim(),
+    violations,
+    others_viol: others,
+    created_at: new Date().toISOString()
+  };
+
+  const tickets = getTickets();
+  tickets.unshift(ticket);
+  saveTickets(tickets);
+
+  showToast('✅ Na-save na ang ticket!');
+  setTimeout(() => {
+    clearForm();
+    showTabByName('records');
+    renderRecords();
+  }, 1200);
+}
+
+function showTabByName(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`screen-${name}`).classList.add('active');
+  document.querySelectorAll('.tab')[name === 'new' ? 0 : name === 'records' ? 1 : 2].classList.add('active');
+}
+
+function clearForm() {
+  ['tct_no','first_name','middle_name','last_name','address',
+   'license_no','plate_no','reg_owner','owner_address',
+   'officer_name','officer_badge','others_viol','birth_date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('vehicle_type').value = 'MC';
+  VIOLATIONS.forEach((_, i) => {
+    const cb = document.getElementById(`v${i}`);
+    if (cb) cb.checked = false;
+    const item = document.getElementById(`vitem-${i}`);
+    if (item) item.classList.remove('checked');
+  });
+  setDefaultDateTime();
+}
+
+// ===== RECORDS =====
+let activeFilter = 'all';
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderRecords();
+}
+
+function renderRecords() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase();
+  let tickets = getTickets();
+  if (q) {
+    tickets = tickets.filter(t =>
+      (t.first_name + ' ' + t.last_name).toLowerCase().includes(q) ||
+      t.tct_no.toString().includes(q) ||
+      (t.plate_no||'').toLowerCase().includes(q)
+    );
+  }
+  if (activeFilter === 'paid') tickets = tickets.filter(t => t.paid);
+  if (activeFilter === 'unpaid') tickets = tickets.filter(t => !t.paid);
+
+  const list = document.getElementById('records-list');
+  if (!tickets.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>${q || activeFilter !== 'all' ? 'Walang nahanap.' : 'Wala pang mga ticket.'}</p></div>`;
+    return;
+  }
+  list.innerHTML = tickets.map(t => `
+    <div class="record-card" style="border-left-color:${t.paid ? '#166534' : '#CC1122'}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div class="rec-tct">TCT No. ${t.tct_no} · ${formatDate(t.date)} ${formatTime(t.time)}</div>
+        <span class="status-badge ${t.paid ? 'status-paid' : 'status-unpaid'}">${t.paid ? '✅ BAYAD' : '🔴 HINDI BAYAD'}</span>
+      </div>
+      <div class="rec-name">${t.last_name}, ${t.first_name} ${t.middle_name}</div>
+      <div class="rec-date">🏍️ ${t.vehicle_type} · ${t.plate_no || 'No Plate'} · ${t.officer_name}</div>
+      <div class="rec-violations">
+        ${t.violations.slice(0,3).map(v => `<span class="violation-badge">${v.length > 30 ? v.slice(0,28)+'…' : v}</span>`).join('')}
+        ${t.violations.length > 3 ? `<span class="violation-badge">+${t.violations.length-3} pa</span>` : ''}
+        ${t.others_viol ? `<span class="violation-badge">${t.others_viol}</span>` : ''}
+      </div>
+      <div class="record-actions">
+        <button class="btn-small ${t.paid ? 'btn-sm-unpaid' : 'btn-sm-paid'}" onclick="togglePaid(${t.id})">
+          ${t.paid ? '🔴 Markahan Unpaid' : '✅ Markahan Paid'}
+        </button>
+        <button class="btn-small btn-sm-print" onclick="printTicket(${t.id})">🖨️ I-Print</button>
+        <button class="btn-small btn-sm-del" onclick="deleteTicket(${t.id})">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function togglePaid(id) {
+  const tickets = getTickets();
+  const idx = tickets.findIndex(t => t.id === id);
+  if (idx === -1) return;
+  tickets[idx].paid = !tickets[idx].paid;
+  tickets[idx].paid_at = tickets[idx].paid ? new Date().toISOString() : null;
+  saveTickets(tickets);
+  renderRecords();
+  renderStats();
+  showToast(tickets[idx].paid ? '✅ Na-mark na BAYAD!' : '🔴 Na-mark na HINDI BAYAD.');
+}
+
+function deleteTicket(id) {
+  if (!confirm('Sigurado ka bang burahin ang ticket na ito?')) return;
+  const tickets = getTickets().filter(t => t.id !== id);
+  saveTickets(tickets);
+  renderRecords();
+  showToast('🗑️ Na-delete na ang ticket.');
+}
+
+// ===== PRINT =====
+function printTicket(id) {
+  const t = getTickets().find(x => x.id === id);
+  if (!t) return;
+
+  const allViols = VIOLATIONS.concat(t.others_viol ? [t.others_viol] : []);
+
+  document.getElementById('printDoc').innerHTML = `
+    <div class="print-header">
+      <div style="font-size:8px">Republic of the Philippines · Province of Camarines Norte</div>
+      <div style="font-size:9px;font-weight:700">Municipality of Jose Panganiban</div>
+      <div style="font-size:9px;font-weight:700">JOSE PANGANIBAN MUNICIPAL POLICE STATION</div>
+    </div>
+    <div class="print-title">TRAFFIC CITATION TICKET${t.paid ? ' <span style="color:#166534;font-size:12px">[BAYAD NA ✅]</span>' : ''}</div>
+    <div class="print-row">
+      <label>Date:</label><span>${formatDate(t.date)}</span>
+      <label>Time:</label><span>${formatTime(t.time)}</span>
+      <label>TCT No.:</label><span style="font-weight:700;color:#CC1122">${t.tct_no}</span>
+    </div>
+    <div class="print-row"><label>Name:</label><span>${t.last_name}, ${t.first_name} ${t.middle_name}</span><label>Birth Date:</label><span>${t.birth_date ? formatDate(t.birth_date) : ''}</span></div>
+    <div class="print-row"><label>Address:</label><span>${t.address}</span></div>
+    <div class="print-row">
+      <label>License No.:</label><span>${t.license_no}</span>
+      <label>Plate No.:</label><span>${t.plate_no}</span>
+      <label>Vehicle Type:</label><span>${t.vehicle_type}</span>
+    </div>
+    <div class="print-row"><label>Registered Owner:</label><span>${t.reg_owner}</span><label>Address:</label><span>${t.owner_address}</span></div>
+
+    <div class="print-violations-header">YOU ARE HEREBY CITED FOR COMMITTING THE FOLLOWING TRAFFIC ADMINISTRATIVE VIOLATION/S:</div>
+    <div class="print-viol-list">
+      ${VIOLATIONS.map(v => {
+        const checked = t.violations.includes(v);
+        return `<div class="print-viol-item${checked?' checked':''}"><span class="print-checkbox">${checked?'✓':''}</span>${v}</div>`;
+      }).join('')}
+      ${t.others_viol ? `<div class="print-viol-item checked"><span class="print-checkbox">✓</span>Others: ${t.others_viol}</div>` : '<div class="print-viol-item"><span class="print-checkbox"></span>Others: _______________</div>'}
+    </div>
+
+    <div class="print-footer-note">YOU ARE HEREBY DIRECTED TO REPORT to the JOSE PANGANIBAN MUNICIPAL POLICE STATION TRAFFIC SECTION, within THREE (3) days from date of receipt hereof. Failure to do so shall mean a waiver of right and criminal action shall be instituted against you.</div>
+
+    <div class="print-sig-row">
+      <div class="print-sig-block">
+        <div class="print-sig-line"></div>
+        <div>${t.officer_name}${t.officer_badge ? ' / '+t.officer_badge : ''}</div>
+        <div><em>Apprehending Officer</em></div>
+      </div>
+      <div class="print-sig-block">
+        <div class="print-sig-line"></div>
+        <div><em>Driver/Operator</em></div>
+      </div>
+    </div>
+
+    <div class="print-copy-row">
+      <div class="print-copy-item">Original – Violator</div>
+      <div class="print-copy-item">Duplicate – Apprehending Officer</div>
+      <div class="print-copy-item">Triplicate – MTO</div>
+    </div>
+  `;
+
+  document.getElementById('printOverlay').classList.add('open');
+}
+
+function closePrint() {
+  document.getElementById('printOverlay').classList.remove('open');
+}
+
+// ===== STATS =====
+function renderStats() {
+  const tickets = getTickets();
+  const today = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const weekAgo = new Date(now - 7*86400000).toISOString().split('T')[0];
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+
+  document.getElementById('stat-total').textContent = tickets.length;
+  document.getElementById('stat-today').textContent = tickets.filter(t => t.date === today).length;
+  document.getElementById('stat-week').textContent = tickets.filter(t => t.date >= weekAgo).length;
+  document.getElementById('stat-month').textContent = tickets.filter(t => t.date >= monthStart).length;
+  document.getElementById('stat-unpaid').textContent = tickets.filter(t => !t.paid).length;
+  document.getElementById('stat-paid').textContent = tickets.filter(t => t.paid).length;
+
+  // Top violations
+  const violCount = {};
+  tickets.forEach(t => t.violations.forEach(v => { violCount[v] = (violCount[v]||0)+1; }));
+  const sorted = Object.entries(violCount).sort((a,b) => b[1]-a[1]).slice(0,5);
+  document.getElementById('top-violations').innerHTML = sorted.length ? sorted.map(([v,c]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;font-size:12px">
+      <span>${v}</span>
+      <span style="background:var(--navy);color:white;border-radius:12px;padding:2px 8px;font-weight:700;font-size:11px">${c}</span>
+    </div>
+  `).join('') : '<p style="color:var(--gray);font-size:12px;text-align:center">Wala pang datos.</p>';
+
+  // Vehicle stats
+  const vtCount = {};
+  tickets.forEach(t => { vtCount[t.vehicle_type] = (vtCount[t.vehicle_type]||0)+1; });
+  document.getElementById('vehicle-stats').innerHTML = Object.entries(vtCount).map(([v,c]) => `
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:13px">
+      <span>${v}</span><span style="font-weight:700;color:var(--navy)">${c}</span>
+    </div>
+  `).join('') || '<p style="color:var(--gray);font-size:12px;text-align:center">Wala pang datos.</p>';
+}
+
+function clearAllData() {
+  if (!confirm('BABALA: Mabubura ang LAHAT ng ticket records. Sigurado ka ba?')) return;
+  if (!confirm('PANGALAWANG PAGKUMPIRMA: Hindi na ito mababawi. Ituloy ba?')) return;
+  localStorage.removeItem('jpang_tct');
+  renderRecords();
+  renderStats();
+  showToast('🗑️ Naalis na ang lahat ng data.');
+}
+
+// ===== EXPORT =====
+function exportData() {
+  const tickets = getTickets();
+  if (!tickets.length) { showToast('Walang data para i-export.'); return; }
+  const json = JSON.stringify(tickets, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `jpang-tct-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📤 Na-export na ang data!');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+
+// ===== PWA INSTALL =====
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('installBanner').style.display = 'none';
+    });
+  }
+}
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').style.display = 'none';
+  showToast('✅ Naka-install na ang app!');
+});
+</script>
+</body>
+</html>
