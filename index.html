@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#003087">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TCT JPang">
+<meta name="description" content="Traffic Citation Ticket - LGU Jose Panganiban">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.png">
+<title>Traffic Citation Ticket — LGU Jose Panganiban</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #002366;
+    --gold: #C9A84C;
+    --gold-light: #F0D080;
+    --red: #CC1122;
+    --white: #FAFAF8;
+    --gray: #6B7280;
+    --light: #EEF1F7;
+    --border: #B0B8CC;
+    --success: #166534;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--light);
+    color: #111;
+    min-height: 100vh;
+  }
+
+  /* ===== LOGIN SCREEN ===== */
+  #login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(160deg, #001a4d 0%, #002366 50%, #003580 100%);
+    padding: 24px;
+  }
+  .login-seal {
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, var(--gold-light), #8B6914);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    border: 3px solid var(--gold-light);
+    box-shadow: 0 0 32px rgba(201,168,76,0.4);
+    margin-bottom: 14px;
+  }
+  .login-title {
+    font-family: 'IM Fell English', serif;
+    color: var(--gold-light);
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .login-sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+    text-align: center;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .login-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px 20px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    border-top: 4px solid var(--gold);
+  }
+  .login-card h2 {
+    font-family: 'IM Fell English', serif;
+    color: var(--navy);
+    font-size: 16px;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .login-field { margin-bottom: 14px; }
+  .login-field label {
+    display: block;
+    font-size: 10px; font-weight: 700;
+    color: var(--navy); text-transform: uppercase;
+    letter-spacing: 0.3px; margin-bottom: 5px;
+  }
+  .login-field input {
+    width: 100%; padding: 11px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    background: #FAFCFF;
+    transition: border-color 0.2s;
+  }
+  .login-field input:focus {
+    outline: none; border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(0,35,102,0.1);
+  }
+  .login-err {
+    color: var(--red); font-size: 12px;
+    text-align: center; margin-bottom: 10px;
+    min-height: 16px;
+  }
+  .btn-login {
+    width: 100%;
+    background: linear-gradient(135deg, var(--navy), #003580);
+    color: white; border: none; border-radius: 10px;
+    padding: 13px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: 'Source Sans 3', sans-serif;
+    box-shadow: 0 4px 12px rgba(0,35,102,0.3);
+    transition: all 0.2s;
+  }
+  .btn-login:active { transform: scale(0.97); }
+
+  /* ===== APP (hidden until login) ===== */
+  #app { display: none; }
+
+  /* ===== APP HEADER ===== */
+  .app-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #001a4d 100%);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  .app-header .seal {
+    width: 48px; height: 48px;
+    background: radial-gradient(circle, var(--gold) 0%, #8B6914 100%);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+    border: 2px solid var(--gold-light);
+  }
+  .app-header .title-block h1 {
+    font-family: 'IM Fell English', serif;
+    font-size: 15px; line-height: 1.2;
+    color: var(--gold-light);
+  }
+  .app-header .title-block p {
+    font-size: 10px; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .header-right {
+    margin-left: auto;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .header-user-badge {
+    background: rgba(201,168,76,0.25);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px; font-weight: 700;
+    color: var(--gold-light);
+    max-width: 100px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .btn-icon {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white; border-radius: 8px;
+    padding: 6px 10px; font-size: 18px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .btn-icon:hover { background: rgba(255,255,255,0.25); }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex;
+    background: var(--navy);
+    border-bottom: 3px solid var(--gold);
+    overflow-x: auto;
+  }
+  .tab {
+    flex: 1; padding: 10px 4px;
+    text-align: center; color: rgba(255,255,255,0.6);
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.3px; cursor: pointer;
+    transition: all 0.2s; border-bottom: 3px solid transparent;
+    margin-bottom: -3px; white-space: nowrap;
+    min-width: 60px;
+  }
+  .tab.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+  .tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; padding: 16px; }
+  .screen.active { display: block; }
+
+  /* ===== FORM CARD ===== */
+  .form-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,35,102,0.12);
+    margin-bottom: 16px;
+  }
+  .form-card-header {
+    background: linear-gradient(90deg, var(--navy), #003580);
+    color: white;
+    padding: 10px 16px;
+    font-family: 'IM Fell English', serif;
+    font-size: 13px;
+    border-left: 4px solid var(--gold);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-card-body { padding: 14px 16px; }
+
+  /* ===== OFFICIAL TICKET HEADER ===== */
+  .ticket-official-header {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(0,35,102,0.12);
+    border-top: 5px solid var(--navy);
+    border-bottom: 3px solid var(--gold);
+    position: relative;
+  }
+  .ticket-official-header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: repeating-linear-gradient(90deg, var(--navy) 0px, var(--navy) 6px, var(--gold) 6px, var(--gold) 8px);
+  }
+  .official-seals {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .seal-circle {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f5e6c0, #c9a84c);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    border: 2px solid var(--navy);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .official-text { flex: 1; padding: 0 8px; }
+  .official-text .republic { font-size: 9px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+  .official-text .province { font-size: 10px; color: var(--navy); font-weight: 600; }
+  .official-text .municipality { font-size: 10px; color: var(--navy); }
+  .official-text .station { font-size: 11px; font-weight: 700; color: var(--navy); text-transform: uppercase; }
+  .ticket-title-banner {
+    background: var(--navy);
+    color: var(--gold-light);
+    font-family: 'IM Fell English', serif;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    margin-top: 8px;
+  }
+  .tct-row {
+    display: flex; gap: 12px; margin-top: 8px;
+  }
+  .tct-field {
+    flex: 1; text-align: left;
+  }
+  .tct-field label { font-size: 9px; color: var(--gray); text-transform: uppercase; display: block; }
+  .tct-field span { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .tct-no-display {
+    font-size: 22px; font-weight: 700; color: var(--red);
+    background: #fff5f5;
+    border: 2px dashed var(--red);
+    border-radius: 6px; padding: 4px 12px;
+    align-self: center;
+  }
+
+  /* ===== FORM FIELDS ===== */
+  .field-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .field-group { flex: 1; }
+  .field-group label {
+    display: block; font-size: 10px; font-weight: 700;
+    color: var(--navy); text-transform: uppercase;
+    letter-spacing: 0.3px; margin-bottom: 4px;
+  }
+  .field-group input, .field-group select {
+    width: 100%; padding: 9px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 13px;
+    font-family: 'Source Sans 3', sans-serif;
+    background: #FAFCFF;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .field-group input:focus, .field-group select:focus {
+    outline: none; border-color: var(--navy);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0,35,102,0.1);
+  }
+  .field-group.full { flex: 100%; }
+  
+  /* ===== VIOLATIONS GRID (with fine) ===== */
+  .violations-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .violation-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #FAFCFF;
+    font-size: 11px; line-height: 1.3;
+  }
+  .violation-item:active { transform: scale(0.99); }
+  .violation-item.checked {
+    background: #EEF3FF;
+    border-color: var(--navy);
+    color: var(--navy);
+    font-weight: 600;
+  }
+  .violation-item input[type="checkbox"] {
+    width: 16px; height: 16px; flex-shrink: 0;
+    accent-color: var(--navy);
+    cursor: pointer;
+  }
+  .viol-name { flex: 1; }
+  .viol-fine-input {
+    width: 72px !important;
+    flex-shrink: 0;
+    padding: 5px 6px !important;
+    font-size: 12px !important;
+    border: 1.5px solid var(--border) !important;
+    border-radius: 6px !important;
+    background: white !important;
+    text-align: right;
+    font-weight: 700;
+    color: var(--success) !important;
+  }
+  .viol-fine-input:focus {
+    border-color: var(--success) !important;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(22,101,52,0.12) !important;
+  }
+  .viol-fine-label {
+    font-size: 9px;
+    color: var(--gray);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  /* Counter/cart style */
+  .viol-counter {
+    display: flex; align-items: center; gap: 0;
+    flex-shrink: 0;
+  }
+  .viol-counter-btn {
+    width: 26px; height: 26px;
+    border: none; border-radius: 50%;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .viol-btn-add {
+    background: var(--navy); color: white;
+    box-shadow: 0 2px 6px rgba(0,35,102,0.3);
+  }
+  .viol-btn-add:active { transform: scale(0.9); background: #001a4d; }
+  .viol-btn-minus {
+    background: #FEE2E2; color: var(--red);
+  }
+  .viol-btn-minus:active { transform: scale(0.9); }
+  .viol-count-display {
+    min-width: 20px; text-align: center;
+    font-size: 13px; font-weight: 800;
+    color: var(--navy);
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--navy), #003580);
+    color: white; border: none; border-radius: 10px;
+    padding: 14px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: 'Source Sans 3', sans-serif;
+    box-shadow: 0 4px 12px rgba(0,35,102,0.3);
+    margin-bottom: 10px;
+  }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-danger {
+    background: linear-gradient(135deg, var(--red), #990011);
+    box-shadow: 0 4px 12px rgba(204,17,34,0.3);
+  }
+  .btn-success {
+    background: linear-gradient(135deg, #166534, #14532d);
+    box-shadow: 0 4px 12px rgba(22,101,52,0.3);
+  }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), #8B6914);
+    color: #111;
+    box-shadow: 0 4px 12px rgba(201,168,76,0.3);
+  }
+
+  /* ===== RECORDS LIST ===== */
+  .record-card {
+    background: white;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,35,102,0.08);
+    border-left: 4px solid var(--navy);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .record-card:active { transform: scale(0.98); }
+  .record-card .rec-tct { font-size: 11px; color: var(--gray); }
+  .record-card .rec-name { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .record-card .rec-date { font-size: 12px; color: var(--gray); }
+  .record-card .rec-violations {
+    margin-top: 6px;
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .violation-badge {
+    background: #EEF3FF; color: var(--navy);
+    font-size: 9px; font-weight: 600;
+    padding: 2px 7px; border-radius: 20px;
+    border: 1px solid #C7D2EE;
+  }
+  .record-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-small {
+    flex: 1; padding: 8px;
+    border: none; border-radius: 7px;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .btn-sm-view { background: var(--light); color: var(--navy); }
+  .btn-sm-print { background: var(--navy); color: white; }
+  .btn-sm-del { background: #FEE2E2; color: var(--red); }
+
+  /* ===== PAID / UNPAID BADGE ===== */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 800;
+    padding: 3px 10px; border-radius: 20px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .status-unpaid { background: #FEE2E2; color: #991B1B; border: 1.5px solid #FCA5A5; }
+  .status-paid { background: #DCFCE7; color: #166534; border: 1.5px solid #86EFAC; }
+  .btn-sm-paid { background: #DCFCE7; color: #166534; border: 1.5px solid #86EFAC; }
+  .btn-sm-unpaid { background: #FEE2E2; color: #991B1B; border: 1.5px solid #FCA5A5; }
+  .filter-pills { display: flex; gap: 8px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 2px; }
+  .filter-pill {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    border: 1.5px solid var(--border); background: white; color: var(--gray);
+    transition: all 0.15px;
+  }
+  .filter-pill.active { background: var(--navy); color: white; border-color: var(--navy); }
+  .filter-pill.pill-unpaid.active { background: #991B1B; border-color: #991B1B; }
+  .filter-pill.pill-paid.active { background: #166534; border-color: #166534; }
+
+  /* ===== PRINT PREVIEW ===== */
+  .print-overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 999; overflow-y: auto; padding: 20px;
+  }
+  .print-overlay.open { display: block; }
+  .print-doc {
+    background: white; max-width: 400px;
+    margin: 0 auto; padding: 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    border: 2px solid var(--border);
+    position: relative;
+  }
+  .print-header { text-align: center; margin-bottom: 8px; }
+  .print-title {
+    font-family: 'IM Fell English', serif;
+    font-size: 15px; font-weight: bold;
+    color: var(--navy); text-align: center;
+    text-transform: uppercase; border: 2px solid var(--navy);
+    padding: 4px; margin: 6px 0;
+  }
+  .print-row {
+    display: flex; border-bottom: 1px solid #ddd; margin-bottom: 4px;
+    padding-bottom: 4px; gap: 8px;
+  }
+  .print-row label { font-weight: 700; white-space: nowrap; color: var(--navy); }
+  .print-row span { flex: 1; }
+  .print-violations-header {
+    font-weight: 700; text-align: center;
+    background: var(--navy); color: white;
+    padding: 3px; margin: 6px 0; font-size: 9px;
+  }
+  .print-viol-list { font-size: 9px; }
+  .print-viol-item { break-inside: avoid; padding: 2px 0; display:flex; align-items:center; gap:6px; border-bottom:1px solid #f0f0f0;}
+  .print-viol-item.checked { font-weight: 700; background:#f0f5ff; padding: 2px 4px; border-radius:3px; }
+  .print-checkbox { width: 8px; height: 8px; border: 1px solid #333; display: inline-block; text-align: center; line-height: 8px; font-size: 7px; margin-right: 3px; flex-shrink:0; }
+  .print-viol-fine { margin-left:auto; font-weight:700; color:var(--success); white-space:nowrap; font-size:9px;}
+  .print-sig-row { display: flex; margin-top: 16px; gap: 20px; }
+  .print-sig-block { flex: 1; text-align: center; }
+  .print-sig-line { border-top: 1px solid #333; margin-bottom: 3px; margin-top: 24px; }
+  .print-footer-note { font-size: 8px; color: #555; margin-top: 8px; border: 1px solid #ddd; padding: 6px; }
+  .print-copy-row { display: flex; border-top: 2px solid var(--navy); margin-top: 8px; font-size: 8px; }
+  .print-copy-item { flex: 1; padding: 3px; border-right: 1px solid var(--navy); text-align: center; }
+  .print-copy-item:last-child { border-right: none; }
+  .print-total-row { display:flex; justify-content:space-between; background:#f0f5ff; border:2px solid var(--navy); padding:6px 10px; border-radius:4px; margin-top:8px; font-weight:700; font-size:12px;}
+
+  /* ===== STATS ===== */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-box {
+    background: white; border-radius: 10px; padding: 14px;
+    text-align: center; box-shadow: 0 2px 8px rgba(0,35,102,0.1);
+    border-top: 3px solid var(--navy);
+  }
+  .stat-box .num { font-size: 32px; font-weight: 700; color: var(--navy); }
+  .stat-box .lbl { font-size: 10px; color: var(--gray); text-transform: uppercase; }
+  .stat-box.gold { border-top-color: var(--gold); }
+  .stat-box.red { border-top-color: var(--red); }
+  .stat-box.green { border-top-color: var(--success); }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+    background: var(--navy); color: white; padding: 10px 20px;
+    border-radius: 20px; font-size: 13px; font-weight: 600;
+    z-index: 9999; opacity: 0; transition: opacity 0.3s;
+    white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .toast.show { opacity: 1; }
+
+  /* ===== SEARCH ===== */
+  .search-box {
+    display: flex; gap: 8px; margin-bottom: 12px;
+  }
+  .search-box input {
+    flex: 1; padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 13px;
+    font-family: 'Source Sans 3', sans-serif;
+    background: white;
+  }
+  .search-box input:focus { outline: none; border-color: var(--navy); }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* ===== PRINT CLOSE BTN ===== */
+  .print-close-bar {
+    display: flex; gap: 8px; max-width: 400px; margin: 0 auto 16px;
+  }
+  .btn-close-print, .btn-do-print {
+    flex: 1; padding: 12px;
+    border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; font-family: 'Source Sans 3', sans-serif;
+  }
+  .btn-close-print { background: #374151; color: white; }
+  .btn-do-print { background: var(--gold); color: #111; }
+
+  /* ===== ADMIN PANEL ===== */
+  .admin-card {
+    background: white;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,35,102,0.08);
+    display: flex; align-items: center; gap: 12px;
+    border-left: 4px solid var(--gold);
+  }
+  .admin-avatar {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--navy), #003580);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .admin-info { flex: 1; }
+  .admin-info .admin-username { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .admin-info .admin-role {
+    font-size: 10px; color: var(--gray); text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .admin-superadmin { border-left-color: var(--gold); }
+  .role-badge {
+    font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 12px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .role-super { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+  .role-admin { background: #EEF3FF; color: var(--navy); border: 1px solid #C7D2EE; }
+
+  .add-admin-form {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 16px rgba(0,35,102,0.12);
+    border-top: 3px solid var(--gold);
+  }
+  .add-admin-form h3 {
+    font-family: 'IM Fell English', serif;
+    color: var(--navy); font-size: 14px; margin-bottom: 14px;
+  }
+
+  @media print {
+    body > *:not(.print-overlay) { display: none !important; }
+    .print-overlay { background: white !important; padding: 0 !important; }
+    .print-close-bar { display: none !important; }
+    .print-doc { border: none !important; margin: 0; padding: 8px; }
+  }
+
+  /* Install prompt */
+  .install-banner {
+    background: linear-gradient(90deg, var(--gold), #8B6914);
+    color: #111; padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; font-weight: 600;
+  }
+  .install-banner button {
+    background: var(--navy); color: white; border: none;
+    border-radius: 6px; padding: 6px 12px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  #installBanner { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-seal">⚖️</div>
+  <div class="login-title">Traffic Citation Ticket System</div>
+  <div class="login-sub">LGU Jose Panganiban · Camarines Norte</div>
+  <div class="login-card">
+    <h2>🔐 Mag-Login</h2>
+    <div class="login-field">
+      <label>Username</label>
+      <input type="text" id="login-username" placeholder="Ilagay ang username" autocomplete="username" autocapitalize="none">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="Ilagay ang password" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <button class="btn-login" onclick="doLogin()">🔓 PUMASOK</button>
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="app">
+
+<!-- Install Banner -->
+<div id="installBanner" class="install-banner">
+  <span>📲 I-install ang app sa iyong Android</span>
+  <button onclick="installApp()">I-INSTALL</button>
+</div>
+
+<!-- App Header -->
+<header class="app-header">
+  <div class="seal">⚖️</div>
+  <div class="title-block">
+    <h1>Traffic Citation Ticket</h1>
+    <p>LGU Jose Panganiban · Camarines Norte</p>
+  </div>
+  <div class="header-right">
+    <span class="header-user-badge" id="header-username">—</span>
+    <button class="btn-icon" onclick="exportData()" title="I-export">📤</button>
+    <button class="btn-icon" onclick="doLogout()" title="Logout">🚪</button>
+  </div>
+</header>
+
+<!-- Tabs -->
+<nav class="tabs" id="main-tabs">
+  <div class="tab active" onclick="showTab('new')">
+    <span class="tab-icon">📝</span>BAGONG TCT
+  </div>
+  <div class="tab" onclick="showTab('records')">
+    <span class="tab-icon">🗂️</span>MGA RECORD
+  </div>
+  <div class="tab" onclick="showTab('stats')">
+    <span class="tab-icon">📊</span>ULAT
+  </div>
+  <div class="tab" id="tab-admin" style="display:none" onclick="showTab('admin')">
+    <span class="tab-icon">👥</span>ADMIN
+    <span id="admin-tab-badge" style="display:none;background:var(--red);color:white;border-radius:10px;padding:1px 6px;font-size:9px;font-weight:800;margin-left:2px"></span>
+  </div>
+</nav>
+
+<!-- ===== NEW TICKET SCREEN ===== -->
+<div id="screen-new" class="screen active">
+
+  <!-- Official Header -->
+  <div class="ticket-official-header">
+    <div class="official-seals">
+      <div class="seal-circle">🛡️</div>
+      <div class="official-text">
+        <div class="republic">Republic of the Philippines</div>
+        <div class="province">Province of Camarines Norte</div>
+        <div class="municipality">Municipality of Jose Panganiban</div>
+        <div class="station">Jose Panganiban Municipal Police Station</div>
+      </div>
+      <div class="seal-circle">🏛️</div>
+    </div>
+    <div class="ticket-title-banner">TRAFFIC CITATION TICKET</div>
+    <div class="tct-row">
+      <div class="tct-field">
+        <label>TCT No.</label>
+        <span id="tct-display" style="color:var(--red);font-size:20px;font-weight:700;">—</span>
+      </div>
+      <div class="tct-field">
+        <label>Date</label>
+        <span id="date-display">—</span>
+      </div>
+      <div class="tct-field">
+        <label>Time</label>
+        <span id="time-display">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCT & Date/Time -->
+  <div class="form-card">
+    <div class="form-card-header">🔢 Impormasyon ng Ticket</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>TCT No. *</label>
+          <input type="number" id="tct_no" placeholder="8201" oninput="updateHeader()">
+        </div>
+        <div class="field-group">
+          <label>Petsa *</label>
+          <input type="date" id="date" oninput="updateHeader()">
+        </div>
+        <div class="field-group">
+          <label>Oras *</label>
+          <input type="time" id="time" oninput="updateHeader()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Info -->
+  <div class="form-card">
+    <div class="form-card-header">👤 Personal na Impormasyon</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>Pangalan (First) *</label>
+          <input type="text" id="first_name" placeholder="Darwin">
+        </div>
+        <div class="field-group">
+          <label>Gitnang Pangalan</label>
+          <input type="text" id="middle_name" placeholder="M.">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Apelyido (Last) *</label>
+          <input type="text" id="last_name" placeholder="Rapa">
+        </div>
+        <div class="field-group">
+          <label>Petsa ng Kapanganakan</label>
+          <input type="date" id="birth_date">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group full">
+          <label>Address (House No./Street/Barangay/Municipality/Province)</label>
+          <input type="text" id="address" placeholder="Canipa, Kosa, Norte (P-6)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle Info -->
+  <div class="form-card">
+    <div class="form-card-header">🏍️ Impormasyon ng Sasakyan</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>License No.</label>
+          <input type="text" id="license_no" placeholder="N/A" style="text-transform:uppercase">
+        </div>
+        <div class="field-group">
+          <label>Plate No.</label>
+          <input type="text" id="plate_no" placeholder="EZ-TUD" style="text-transform:uppercase">
+        </div>
+        <div class="field-group">
+          <label>Uri ng Sasakyan</label>
+          <select id="vehicle_type">
+            <option value="MC">MC (Motorsiklo)</option>
+            <option value="CAR">CAR (Sasakyan)</option>
+            <option value="TRI">TRI (Tricycle)</option>
+            <option value="JEEP">JEEP</option>
+            <option value="BUS">BUS</option>
+            <option value="TRUCK">TRUCK</option>
+            <option value="VAN">VAN</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Registered Owner</label>
+          <input type="text" id="reg_owner" placeholder="(kung iba sa driver)">
+        </div>
+        <div class="field-group">
+          <label>Address ng Owner</label>
+          <input type="text" id="owner_address" placeholder="Address">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Violations -->
+  <div class="form-card">
+    <div class="form-card-header">⚠️ Mga Paglabag sa Trapiko
+      <span style="margin-left:auto;font-size:10px;opacity:0.8;font-family:'Source Sans 3',sans-serif">Halaga (₱) sa kanan</span>
+    </div>
+    <div class="form-card-body">
+      <div class="violations-grid" id="violations-grid"></div>
+      <div style="margin-top:8px">
+        <button id="save-fines-btn" class="btn-primary btn-success" onclick="saveFineAmounts()" style="display:none;margin-bottom:8px;font-size:13px;padding:10px">
+          💾 I-SAVE ANG MGA FINE AMOUNT
+        </button>
+      </div>
+      <div style="margin-top:4px">
+        <div class="field-group">
+          <label>Iba pa (Others)</label>
+          <input type="text" id="others_viol" placeholder="Isulat dito ang ibang paglabag...">
+        </div>
+      </div>
+      <div style="margin-top:8px;padding:10px;background:#f0faf5;border-radius:8px;border:1px solid #86EFAC;">
+        <div style="font-size:10px;color:var(--gray);text-transform:uppercase;font-weight:700;letter-spacing:0.3px;margin-bottom:4px;">Kabuuang Multa</div>
+        <div id="total-fine-display" style="font-size:22px;font-weight:700;color:var(--success);">₱0.00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Officer -->
+  <div class="form-card">
+    <div class="form-card-header">👮 Impormasyon ng Pulis</div>
+    <div class="form-card-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>Apprehending Officer *</label>
+          <input type="text" id="officer_name" placeholder="Pangalan ng Pulis">
+        </div>
+        <div class="field-group">
+          <label>Badge / ID No.</label>
+          <input type="text" id="officer_badge" placeholder="Badge No.">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <button class="btn-primary" onclick="saveTicket()">
+    💾 I-SAVE ANG TICKET
+  </button>
+  <button class="btn-primary btn-gold" onclick="clearForm()">
+    🗑️ LINISIN ANG FORM
+  </button>
+
+</div>
+
+<!-- ===== RECORDS SCREEN ===== -->
+<div id="screen-records" class="screen">
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="🔍 Hanapin sa pangalan o TCT No..." oninput="renderRecords()">
+  </div>
+  <div class="filter-pills">
+    <div class="filter-pill active" onclick="setFilter('all',this)">📋 Lahat</div>
+    <div class="filter-pill pill-unpaid" onclick="setFilter('unpaid',this)">🔴 Hindi pa Bayad</div>
+    <div class="filter-pill pill-paid" onclick="setFilter('paid',this)">✅ Bayad na</div>
+  </div>
+  <div id="records-list"></div>
+</div>
+
+<!-- ===== STATS SCREEN ===== -->
+<div id="screen-stats" class="screen">
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="num" id="stat-total">0</div>
+      <div class="lbl">Kabuuang Tickets</div>
+    </div>
+    <div class="stat-box gold">
+      <div class="num" id="stat-today">0</div>
+      <div class="lbl">Ngayon</div>
+    </div>
+    <div class="stat-box red">
+      <div class="num" id="stat-week">0</div>
+      <div class="lbl">Linggong Ito</div>
+    </div>
+    <div class="stat-box green">
+      <div class="num" id="stat-month">0</div>
+      <div class="lbl">Buwang Ito</div>
+    </div>
+    <div class="stat-box red" style="grid-column:span 2">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px">
+        <div>
+          <div class="num" id="stat-unpaid" style="font-size:28px">0</div>
+          <div class="lbl">🔴 Hindi pa Bayad (tickets)</div>
+        </div>
+        <div style="text-align:right">
+          <div id="stat-unpaid-amt" style="font-size:20px;font-weight:800;color:#991B1B">₱0.00</div>
+          <div class="lbl">Kabuuang Hindi pa Bayad</div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-box green" style="grid-column:span 2">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px">
+        <div>
+          <div class="num" id="stat-paid" style="font-size:28px">0</div>
+          <div class="lbl">✅ Bayad na (tickets)</div>
+        </div>
+        <div style="text-align:right">
+          <div id="stat-paid-amt" style="font-size:20px;font-weight:800;color:#166534">₱0.00</div>
+          <div class="lbl">Kabuuang Nakolekta</div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-box" style="grid-column:span 2;border-top-color:var(--gold)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="lbl" style="font-size:12px">💰 GRAND TOTAL NG MULTA</div>
+        <div id="stat-grand-total" style="font-size:22px;font-weight:800;color:var(--navy)">₱0.00</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-header">📋 Pinaka-Madalas na Paglabag</div>
+    <div class="form-card-body">
+      <div id="top-violations"></div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-header">🏍️ Uri ng Sasakyan</div>
+    <div class="form-card-body">
+      <div id="vehicle-stats"></div>
+    </div>
+  </div>
+
+  <button class="btn-primary btn-danger" onclick="clearAllData()">
+    🗑️ BURAHIN LAHAT NG DATA
+  </button>
+</div>
+
+<!-- ===== ADMIN SCREEN ===== -->
+<div id="screen-admin" class="screen">
+  <div class="add-admin-form" id="add-admin-section">
+    <h3>➕ Mag-add ng Bagong Admin</h3>
+    <div class="field-row">
+      <div class="field-group">
+        <label>Username *</label>
+        <input type="text" id="new-admin-user" placeholder="username" autocapitalize="none">
+      </div>
+      <div class="field-group">
+        <label>Password *</label>
+        <input type="password" id="new-admin-pass" placeholder="password">
+      </div>
+    </div>
+    <button class="btn-primary btn-success" onclick="addAdmin()" style="margin-bottom:0">
+      ✅ I-ADD ANG ADMIN
+    </button>
+  </div>
+
+  <!-- Delete Requests (super admin only) -->
+  <div class="form-card" id="delreq-section" style="display:none">
+    <div class="form-card-header" style="background:linear-gradient(90deg,var(--red),#990011)">
+      🗑️ Mga Delete Request
+      <span id="delreq-badge" style="margin-left:8px;background:white;color:var(--red);border-radius:12px;padding:2px 8px;font-size:11px;font-weight:800">0</span>
+    </div>
+    <div class="form-card-body" id="delreq-list">
+      <p style="color:var(--gray);font-size:13px;text-align:center">Walang pending request.</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-header">👥 Listahan ng mga Admin</div>
+    <div class="form-card-body" id="admin-list"></div>
+  </div>
+</div>
+
+<!-- ===== PRINT OVERLAY ===== -->
+<div id="printOverlay" class="print-overlay">
+  <div class="print-close-bar">
+    <button class="btn-close-print" onclick="closePrint()">✕ ISARA</button>
+    <button class="btn-do-print" onclick="window.print()">🖨️ I-PRINT</button>
+  </div>
+  <div class="print-doc" id="printDoc"></div>
+</div>
+
+</div><!-- end #app -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DELETE REQUESTS (stored in JSONBin) =====
+const DELREQ_BIN_ID2 = localStorage.getItem('jpang_delreq_bin') || null;
+let _delreqBinId = DELREQ_BIN_ID2;
+
+async function getDeleteRequests() {
+  if (!_delreqBinId) return [];
+  try {
+    const rec = await binGet(_delreqBinId);
+    return rec.requests || [];
+  } catch(e) { return []; }
+}
+
+async function saveDeleteRequests(arr) {
+  try {
+    if (!_delreqBinId) {
+      _delreqBinId = await binCreate('jpang-delreqs', { requests: arr });
+      localStorage.setItem('jpang_delreq_bin', _delreqBinId);
+    } else {
+      await binUpdate(_delreqBinId, { requests: arr });
+    }
+  } catch(e) { throw e; }
+}
+
+// ===== AUTH =====
+const SUPER_ADMIN = 'LGUJPANG';
+const SUPER_PASS  = 'Permanent23'; // super admin password
+
+// getAdmins and saveAdmins are defined below (async, JSONBin)
+
+async function initAdmins() {
+  let admins = await getAdmins();
+  if (!admins.find(a => a.username === SUPER_ADMIN)) {
+    admins.unshift({ username: SUPER_ADMIN, password: SUPER_PASS, role: 'superadmin', added_at: new Date().toISOString() });
+    await saveAdmins(admins);
+  }
+}
+
+let currentUser = null;
+
+// ===== SESSION PERSISTENCE =====
+function saveSession(user) {
+  sessionStorage.setItem('jpang_session', JSON.stringify(user));
+}
+function clearSession() {
+  sessionStorage.removeItem('jpang_session');
+}
+function restoreSession() {
+  try {
+    const s = sessionStorage.getItem('jpang_session');
+    return s ? JSON.parse(s) : null;
+  } catch { return null; }
+}
+
+async function doLogin() {
+  const u = document.getElementById('login-username').value.trim();
+  const p = document.getElementById('login-password').value;
+  const err = document.getElementById('login-err');
+  if (!u || !p) { err.textContent = '⚠️ Punan ang username at password.'; return; }
+  err.textContent = '';
+
+  // Check super admin first (hardcoded, no DB needed)
+  if (u === SUPER_ADMIN && p === SUPER_PASS) {
+    currentUser = { username: SUPER_ADMIN, password: SUPER_PASS, role: 'superadmin' };
+    loginSuccess(currentUser);
+    return;
+  }
+
+  // Check regular admins from JSONBin
+  showLoading('Sinisigurado ang koneksyon...');
+  try {
+    const admins = await getAdmins();
+    hideLoading();
+    const found = admins.find(a => a.username === u && a.password === p);
+    if (!found) { err.textContent = '❌ Mali ang username o password.'; return; }
+    currentUser = found;
+    loginSuccess(currentUser);
+  } catch(e) {
+    hideLoading();
+    err.textContent = '❌ Hindi ma-connect sa database. Subukan ulit.';
+    console.error(e);
+  }
+}
+
+async function loginSuccess(user) {
+  currentUser = user;
+  saveSession(user);
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('header-username').textContent = user.username;
+  if (user.role === 'superadmin') {
+    document.getElementById('tab-admin').style.display = '';
+    // Check for pending delete requests and show badge
+    checkPendingRequests();
+  }
+  await buildViolationsGrid();
+  await setDefaultDateTime();
+  updateHeader();
+  await renderRecords();
+  await renderStats();
+  if (user.role === 'superadmin') await renderAdminList();
+}
+
+function doLogout() {
+  currentUser = null;
+  clearSession();
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-err').textContent = '';
+  document.getElementById('tab-admin').style.display = 'none';
+  showTabByName('new');
+}
+
+async function addAdmin() {
+  if (!currentUser || currentUser.role !== 'superadmin') { showToast('⛔ Super admin lang ang pwede.'); return; }
+  const u = document.getElementById('new-admin-user').value.trim();
+  const p = document.getElementById('new-admin-pass').value;
+  if (!u || !p) { showToast('⚠️ Punan ang username at password!'); return; }
+  if (u === SUPER_ADMIN) { showToast('⛔ Hindi pwedeng gamitin ang username na iyon.'); return; }
+  
+  showLoading('Nagko-konekta sa database...');
+  try {
+    // Get current admins (or empty array if none yet)
+    let admins = [];
+    try { admins = await getAdmins(); } catch(e) { admins = []; }
+    
+    if (admins.find(a => a.username === u)) {
+      hideLoading();
+      showToast('⚠️ Mayroon nang ganyang username!');
+      return;
+    }
+    
+    admins.push({ username: u, password: p, role: 'admin', added_at: new Date().toISOString() });
+    
+    document.getElementById('loadingMsg').textContent = 'Nagsa-save ng admin...';
+    await saveAdmins(admins);
+    
+    hideLoading();
+    document.getElementById('new-admin-user').value = '';
+    document.getElementById('new-admin-pass').value = '';
+    showToast('✅ Na-add na ang admin: ' + u);
+    await renderAdminList();
+  } catch(e) {
+    hideLoading();
+    console.error('addAdmin error:', e);
+    showToast('❌ Hindi ma-save. Tingnan ang internet connection.');
+  }
+}
+
+async function renderAdminList() {
+  const list = document.getElementById('admin-list');
+  list.innerHTML = '<p style="color:var(--gray);font-size:12px;text-align:center">Naglo-load...</p>';
+  let admins = [];
+  try { admins = await getAdmins(); } catch(e) { admins = []; }
+
+  const superEntry = { username: SUPER_ADMIN, role: 'superadmin' };
+  const others = admins.filter(a => a.role !== 'superadmin');
+  const all = [superEntry, ...others];
+
+  list.innerHTML = all.map(a => `
+    <div class="admin-card ${a.role === 'superadmin' ? 'admin-superadmin' : ''}">
+      <div class="admin-avatar">${a.role === 'superadmin' ? '👑' : '👤'}</div>
+      <div class="admin-info">
+        <div class="admin-username">${a.username}</div>
+        <div class="admin-role">${a.role === 'superadmin' ? 'Super Administrator' : 'Administrator'}</div>
+      </div>
+      <span class="role-badge ${a.role === 'superadmin' ? 'role-super' : 'role-admin'}">
+        ${a.role === 'superadmin' ? '★ SUPER' : 'ADMIN'}
+      </span>
+    </div>
+  `).join('');
+
+  // Show delete requests for superadmin
+  if (currentUser && currentUser.role === 'superadmin') {
+    document.getElementById('delreq-section').style.display = '';
+    await renderDeleteRequests();
+  }
+}
+
+async function renderDeleteRequests() {
+  const container = document.getElementById('delreq-list');
+  const badge = document.getElementById('delreq-badge');
+  container.innerHTML = '<p style="color:var(--gray);font-size:12px;text-align:center">Naglo-load...</p>';
+
+  let reqs = [];
+  try { reqs = await getDeleteRequests(); } catch(e) { reqs = []; }
+
+  const pending = reqs.filter(r => r.status === 'pending');
+  badge.textContent = pending.length;
+  badge.style.display = pending.length ? 'inline' : 'none';
+
+  if (!pending.length) {
+    container.innerHTML = '<p style="color:var(--gray);font-size:13px;text-align:center;padding:10px">✅ Walang pending delete request.</p>';
+    return;
+  }
+
+  container.innerHTML = pending.map(r => `
+    <div style="border:1.5px solid #FCA5A5;border-radius:8px;padding:12px;margin-bottom:10px;background:#FFF5F5">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-weight:700;color:var(--navy);font-size:13px">TCT No. ${r.tctNo}</span>
+        <span style="font-size:10px;color:var(--gray)">${r.requestedAt ? r.requestedAt.split('T')[0] : ''}</span>
+      </div>
+      <div style="font-size:12px;margin-bottom:4px">👤 <strong>${r.name}</strong></div>
+      <div style="font-size:11px;color:var(--gray);margin-bottom:4px">Ni: <strong>${r.requestedBy}</strong></div>
+      <div style="font-size:11px;background:#FEE2E2;padding:6px;border-radius:6px;margin-bottom:10px">
+        📝 Dahilan: ${r.reason}
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="approveDelete(${r.id})" style="flex:1;padding:8px;background:#166534;color:white;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">
+          ✅ APPROVE — BURAHIN
+        </button>
+        <button onclick="rejectDelete(${r.id})" style="flex:1;padding:8px;background:#6B7280;color:white;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">
+          ❌ REJECT
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function approveDelete(reqId) {
+  if (!confirm('I-approve at burahin ang ticket na ito?')) return;
+  showLoading('Binubura ang ticket...');
+  try {
+    const reqs = await getDeleteRequests();
+    const req = reqs.find(r => r.id === reqId);
+    if (!req) { hideLoading(); showToast('❌ Request not found.'); return; }
+
+    // Delete the ticket
+    const tickets = await getTickets();
+    await saveTickets(tickets.filter(t => t.id !== req.ticketId));
+
+    // Mark request as approved
+    req.status = 'approved';
+    req.approvedAt = new Date().toISOString();
+    await saveDeleteRequests(reqs);
+
+    hideLoading();
+    showToast('✅ Na-approve at nabura na ang ticket!');
+    await renderDeleteRequests();
+    await renderStats();
+  } catch(e) { hideLoading(); showToast('❌ Error. Subukan ulit.'); console.error(e); }
+}
+
+async function rejectDelete(reqId) {
+  const reason = prompt('Dahilan ng pag-reject (optional):') || '';
+  showLoading('Nire-reject...');
+  try {
+    const reqs = await getDeleteRequests();
+    const req = reqs.find(r => r.id === reqId);
+    if (!req) { hideLoading(); return; }
+    req.status = 'rejected';
+    req.rejectedAt = new Date().toISOString();
+    req.rejectReason = reason;
+    await saveDeleteRequests(reqs);
+    hideLoading();
+    showToast('❌ Na-reject ang delete request.');
+    await renderDeleteRequests();
+  } catch(e) { hideLoading(); showToast('❌ Error. Subukan ulit.'); console.error(e); }
+}
+
+// ===== VIOLATIONS LIST (with default fine amounts) =====
+const VIOLATIONS = [
+  { name: "Driving without License", fine: 500 },
+  { name: "Driving with Expired License / Registration", fine: 300 },
+  { name: "Failure to Carry Driver's License", fine: 200 },
+  { name: "Driving while under the Influence of Liquor or Prohibited Drugs", fine: 5000 },
+  { name: "Fake License / ID and Permit", fine: 2000 },
+  { name: "Allowing another person to use his license", fine: 500 },
+  { name: "Drivers with Student's Driver Operating a motor vehicle not accompanied by Professional Driver", fine: 500 },
+  { name: "Failure to carry Certificate of Registration and Official Receipt", fine: 200 },
+  { name: "Dirty or Unclear Plates", fine: 200 },
+  { name: "Inconspicuously / improperly Displayed Plates", fine: 200 },
+  { name: "No Sticker of Current Registration", fine: 200 },
+  { name: "Tampered / Marked Plates / Stickers", fine: 1000 },
+  { name: "No Headlights or No Defective Headlights", fine: 300 },
+  { name: "No Yellow Lights or Defective Tail Lights", fine: 300 },
+  { name: "No Rear / No Stop Lights", fine: 300 },
+  { name: "No Brake Lights", fine: 300 },
+  { name: "No Side Mirror", fine: 200 },
+  { name: "No Signal Lights", fine: 200 },
+  { name: "Dirty and Unsightly Dilapidated Motor Vehicle", fine: 300 },
+  { name: "Unauthorized Improvised Plates", fine: 500 },
+  { name: "Excess Passenger/Load (beyond the seating capacity)", fine: 500 },
+  { name: "Colorum Operation (Driver / Owner)", fine: 3000 },
+  { name: "Employing Insolent, Discourteous or Arrogant Drivers", fine: 500 },
+  { name: "Refusal to convey passengers to proper destination / trip cutting", fine: 500 },
+  { name: "Refusal to render service to public", fine: 500 },
+  { name: "No Franchise / Certificate to Public Conveyance or Provisional Authority Carried", fine: 1000 },
+  { name: "Allowing passengers on Top of the Tricycle", fine: 500 },
+  { name: "Permitting Passengers to Ride on Running Board, Step Board", fine: 500 },
+  { name: "Disregarding Traffic Signs", fine: 500 },
+  { name: "Reckless Driving", fine: 1000 },
+  { name: "Driving in Slippers / Sleeveless", fine: 200 },
+  { name: "Driving or Parking on a place not for Traffic or Parking", fine: 300 },
+  { name: "Hitching", fine: 300 },
+  { name: "Modified Pipes / Mufflers", fine: 500 },
+  { name: "Use of LED Lights with Blinker Mode", fine: 300 },
+  { name: "Not Wearing Safety Helmet", fine: 500 },
+  { name: "Over Speeding (more than 20 km/hr.)", fine: 1000 },
+  { name: "Unregistered Motor Vehicle", fine: 2000 },
+  { name: "Fake OR/Plates/Tags or Stickers/Spurious Documents", fine: 2000 },
+];
+
+// ===== JSONBIN CONFIG =====
+const JSONBIN_KEY = '$2a$10$6oZSxjIfQChbUKbsR1t3t.tEd71.X60W.hoVDGDJ0mtA97b1Dd5DW';
+const JSONBIN_BASE = 'https://api.jsonbin.io/v3';
+let TICKETS_BIN_ID = '69f6ae02aaba882197652d71';
+let ADMINS_BIN_ID  = '69f6ad8f856a6821899d38da';
+let DELREQ_BIN_ID  = '69f6ad8f856a6821899d38da';
+// Fines are stored inside the ADMINS bin (same bin, key: "fines") — no localStorage needed, cross-device sync guaranteed
+
+// ===== FINES (cloud) — stored inside ADMINS bin =====
+async function getFines() {
+  try {
+    const rec = await binGet(ADMINS_BIN_ID);
+    return rec.fines || null;
+  } catch(e) { console.error('getFines error:', e); return null; }
+}
+
+async function saveFines(finesObj) {
+  try {
+    // Read current admins bin content, then write back with fines merged in
+    let current = {};
+    try { current = await binGet(ADMINS_BIN_ID); } catch(e) {}
+    current.fines = finesObj;
+    await binUpdate(ADMINS_BIN_ID, current);
+  } catch(e) {
+    console.error('saveFines error:', e);
+    throw e;
+  }
+}
+
+// ===== LOADING OVERLAY =====
+function showLoading(msg='Naglo-load...') {
+  let ov = document.getElementById('loadingOverlay');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'loadingOverlay';
+    ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,35,102,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-size:15px;font-weight:600;gap:12px;font-family:sans-serif';
+    ov.innerHTML = '<div style="font-size:36px;animation:spin 1s linear infinite">⏳</div><div id="loadingMsg">' + msg + '</div><style>@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}</style>';
+    document.body.appendChild(ov);
+  }
+  document.getElementById('loadingMsg').textContent = msg;
+  ov.style.display = 'flex';
+}
+function hideLoading() {
+  const ov = document.getElementById('loadingOverlay');
+  if (ov) ov.style.display = 'none';
+}
+
+// ===== JSONBIN HELPERS =====
+async function binGet(binId) {
+  const res = await fetch(JSONBIN_BASE + '/b/' + binId + '/latest', {
+    headers: { 'X-Master-Key': JSONBIN_KEY }
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(()=>'');
+    throw new Error('Bin get failed ' + res.status + ': ' + txt);
+  }
+  const data = await res.json();
+  return data.record;
+}
+
+// Test JSONBin connection
+async function testConnection() {
+  try {
+    const res = await fetch(JSONBIN_BASE + '/b', {
+      method: 'GET',
+      headers: { 'X-Master-Key': JSONBIN_KEY }
+    });
+    return res.status !== 401; // 401 = bad key
+  } catch(e) { return false; }
+}
+
+async function binUpdate(binId, payload) {
+  const res = await fetch(JSONBIN_BASE + '/b/' + binId, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_KEY },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error('Bin update failed ' + res.status);
+  return await res.json();
+}
+
+async function binCreate(name, payload) {
+  const res = await fetch(JSONBIN_BASE + '/b', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': JSONBIN_KEY,
+      'X-Bin-Name': name,
+      'X-Bin-Private': 'true'
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error('Bin create failed ' + res.status);
+  const data = await res.json();
+  return data.metadata.id;
+}
+
+// ===== TICKETS (cloud) =====
+async function getTickets() {
+  if (!TICKETS_BIN_ID) return [];
+  try {
+    const rec = await binGet(TICKETS_BIN_ID);
+    return rec.tickets || [];
+  } catch(e) { console.error(e); return []; }
+}
+
+async function saveTickets(arr) {
+  try {
+    if (!TICKETS_BIN_ID) {
+      TICKETS_BIN_ID = await binCreate('jpang-tickets', { tickets: arr });
+      localStorage.setItem('jpang_tickets_bin', TICKETS_BIN_ID);
+    } else {
+      await binUpdate(TICKETS_BIN_ID, { tickets: arr });
+    }
+  } catch(e) { console.error(e); showToast('❌ Error sa pag-save. Subukan ulit.'); }
+}
+
+// ===== ADMINS (cloud) =====
+async function getAdmins() {
+  if (!ADMINS_BIN_ID) return [];
+  try {
+    const rec = await binGet(ADMINS_BIN_ID);
+    return rec.admins || [];
+  } catch(e) {
+    console.error('getAdmins error:', e);
+    // If bin not found, reset and create new
+    if (e.message && e.message.includes('404')) {
+      ADMINS_BIN_ID = null;
+      localStorage.removeItem('jpang_admins_bin');
+    }
+    return [];
+  }
+}
+
+async function saveAdmins(arr) {
+  try {
+    if (!ADMINS_BIN_ID) {
+      console.log('Creating new admins bin...');
+      ADMINS_BIN_ID = await binCreate('jpang-admins', { admins: arr });
+      localStorage.setItem('jpang_admins_bin', ADMINS_BIN_ID);
+      console.log('Admins bin created:', ADMINS_BIN_ID);
+    } else {
+      await binUpdate(ADMINS_BIN_ID, { admins: arr });
+    }
+  } catch(e) {
+    console.error('saveAdmins error:', e);
+    throw e; // re-throw so caller can handle
+  }
+}
+
+// ===== INIT =====
+window.addEventListener('load', async () => {
+  const saved = restoreSession();
+  if (saved) {
+    await loginSuccess(saved);
+  }
+});
+
+async function setDefaultDateTime() {
+  const now = new Date();
+  document.getElementById('date').value = now.toISOString().split('T')[0];
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('time').value = hh + ':' + mm;
+  try {
+    const tickets = await getTickets();
+    if (tickets.length > 0) {
+      const maxTct = Math.max(...tickets.map(t => parseInt(t.tct_no)||0));
+      document.getElementById('tct_no').value = maxTct + 1;
+    }
+  } catch(e) {}
+  updateHeader();
+}
+
+async function buildViolationsGrid() {
+  const grid = document.getElementById('violations-grid');
+  // Load saved fines from cloud
+  let savedFines = null;
+  try { savedFines = await getFines(); } catch(e) {}
+
+  grid.innerHTML = VIOLATIONS.map((v, i) => {
+    const fine = (savedFines && savedFines[i] != null) ? savedFines[i] : v.fine;
+    return `
+    <div class="violation-item" id="vitem-${i}">
+      <input type="checkbox" id="v${i}" onclick="event.stopPropagation(); onViolCheck(${i})">
+      <span class="viol-name" onclick="onViolCheck(${i})">${v.name}</span>
+      <span class="viol-fine-label">₱</span>
+      <input type="number" class="viol-fine-input" id="vfine-${i}" value="${fine}" min="0" step="50"
+        onclick="event.stopPropagation()"
+        oninput="recalcTotal(); markFinesDirty()">
+      <div class="viol-counter" id="vcounter-${i}" style="display:none">
+        <button class="viol-counter-btn viol-btn-minus" onclick="event.stopPropagation(); changeCount(${i},-1)">−</button>
+        <span class="viol-count-display" id="vcount-${i}">1</span>
+        <button class="viol-counter-btn viol-btn-add" onclick="event.stopPropagation(); changeCount(${i},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function onViolCheck(i) {
+  const cb = document.getElementById('v' + i);
+  cb.checked = !cb.checked;
+  const item = document.getElementById('vitem-' + i);
+  const counter = document.getElementById('vcounter-' + i);
+  const countEl = document.getElementById('vcount-' + i);
+  if (cb.checked) {
+    item.classList.add('checked');
+    counter.style.display = 'flex';
+    countEl.textContent = '1';
+  } else {
+    item.classList.remove('checked');
+    counter.style.display = 'none';
+    countEl.textContent = '1';
+  }
+  recalcTotal();
+}
+
+function changeCount(i, delta) {
+  const cb = document.getElementById('v' + i);
+  const countEl = document.getElementById('vcount-' + i);
+  let count = parseInt(countEl.textContent) || 1;
+  count = Math.max(1, count + delta);
+  countEl.textContent = count;
+  // auto-check if adding
+  if (!cb.checked) {
+    cb.checked = true;
+    document.getElementById('vitem-' + i).classList.add('checked');
+    document.getElementById('vcounter-' + i).style.display = 'flex';
+  }
+  recalcTotal();
+}
+
+let finesDirty = false;
+function markFinesDirty() {
+  finesDirty = true;
+  const btn = document.getElementById('save-fines-btn');
+  if (btn) { btn.style.display = 'flex'; }
+}
+
+async function saveFineAmounts() {
+  const finesObj = {};
+  VIOLATIONS.forEach((_, i) => {
+    const el = document.getElementById('vfine-' + i);
+    if (el) finesObj[i] = parseFloat(el.value) || 0;
+  });
+  showLoading('Nagsa-save ng mga fine amount...');
+  try {
+    await saveFines(finesObj);
+    hideLoading();
+    finesDirty = false;
+    const btn = document.getElementById('save-fines-btn');
+    if (btn) btn.style.display = 'none';
+    showToast('✅ Na-save na ang mga fine amount!');
+  } catch(e) {
+    hideLoading();
+    showToast('❌ Hindi na-save. Subukan ulit.');
+    console.error(e);
+  }
+}
+
+function toggleViol(i) {
+  onViolCheck(i);
+}
+
+function recalcTotal() {
+  let total = 0;
+  VIOLATIONS.forEach((_, i) => {
+    const cb = document.getElementById('v' + i);
+    if (cb && cb.checked) {
+      const fineInput = document.getElementById('vfine-' + i);
+      const countEl = document.getElementById('vcount-' + i);
+      const count = parseInt(countEl ? countEl.textContent : '1') || 1;
+      total += (parseFloat(fineInput?.value || 0) || 0) * count;
+    }
+  });
+  document.getElementById('total-fine-display').textContent = '₱' + total.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function updateHeader() {
+  const tct = document.getElementById('tct_no').value;
+  const date = document.getElementById('date').value;
+  const time = document.getElementById('time').value;
+  document.getElementById('tct-display').textContent = tct || '—';
+  document.getElementById('date-display').textContent = date ? formatDate(date) : '—';
+  document.getElementById('time-display').textContent = time ? formatTime(time) : '—';
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  return `${m}-${day}-${y.slice(2)}`;
+}
+function formatTime(t) {
+  if (!t) return '';
+  const [h,m] = t.split(':');
+  const hr = parseInt(h);
+  return `${hr > 12 ? hr-12 : hr || 12}:${m}${hr >= 12 ? 'PM' : 'AM'}`;
+}
+
+// ===== TABS =====
+function showTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`screen-${tab}`).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (tab === 'records') renderRecords();
+  if (tab === 'stats') renderStats();
+  if (tab === 'admin') renderAdminList();
+  // async calls fire and forget
+}
+
+// ===== SAVE TICKET =====
+async function saveTicket() {
+  const tct_no = document.getElementById('tct_no').value.trim();
+  const date = document.getElementById('date').value;
+  const time = document.getElementById('time').value;
+  const first = document.getElementById('first_name').value.trim();
+  const last = document.getElementById('last_name').value.trim();
+  const officer = document.getElementById('officer_name').value.trim();
+
+  if (!tct_no || !date || !first || !last || !officer) {
+    showToast('⚠️ Punan ang lahat ng required fields!');
+    return;
+  }
+
+  const violations = VIOLATIONS
+    .map((v, i) => {
+      const cb = document.getElementById('v' + i);
+      const countEl = document.getElementById('vcount-' + i);
+      const count = parseInt(countEl ? countEl.textContent : '1') || 1;
+      const fine = parseFloat(document.getElementById('vfine-' + i)?.value || 0) || 0;
+      return {
+        name: v.name,
+        fine: fine,
+        count: count,
+        total: fine * count,
+        checked: cb?.checked || false
+      };
+    })
+    .filter(v => v.checked);
+
+  const others = document.getElementById('others_viol').value.trim();
+  if (violations.length === 0 && !others) {
+    showToast('⚠️ Pumili ng kahit isang paglabag!');
+    return;
+  }
+
+  const totalFine = violations.reduce((sum, v) => sum + (v.total || v.fine), 0);
+
+  const ticket = {
+    id: Date.now(),
+    tct_no, date, time,
+    first_name: first,
+    middle_name: document.getElementById('middle_name').value.trim(),
+    last_name: last,
+    birth_date: document.getElementById('birth_date').value,
+    address: document.getElementById('address').value.trim(),
+    license_no: document.getElementById('license_no').value.trim(),
+    plate_no: document.getElementById('plate_no').value.trim().toUpperCase(),
+    vehicle_type: document.getElementById('vehicle_type').value,
+    reg_owner: document.getElementById('reg_owner').value.trim(),
+    owner_address: document.getElementById('owner_address').value.trim(),
+    officer_name: officer,
+    officer_badge: document.getElementById('officer_badge').value.trim(),
+    violations: violations,   // now [{name, fine}]
+    others_viol: others,
+    total_fine: totalFine,
+    created_at: new Date().toISOString(),
+    encoded_by: currentUser ? currentUser.username : ''
+  };
+
+  showLoading('Nagsa-save ng ticket...');
+  try {
+    const tickets = await getTickets();
+    tickets.unshift(ticket);
+    await saveTickets(tickets);
+    hideLoading();
+    showToast('✅ Na-save na ang ticket!');
+    clearForm();
+    showTabByName('records');
+    await renderRecords();
+  } catch(e) {
+    hideLoading();
+    showToast('❌ Hindi na-save. Subukan ulit.');
+    console.error(e);
+  }
+}
+
+function showTabByName(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`screen-${name}`).classList.add('active');
+  const tabs = document.querySelectorAll('.tab');
+  const map = { new:0, records:1, stats:2 };
+  if (map[name] !== undefined) tabs[map[name]].classList.add('active');
+}
+
+function clearForm() {
+  ['tct_no','first_name','middle_name','last_name','address',
+   'license_no','plate_no','reg_owner','owner_address',
+   'officer_name','officer_badge','others_viol','birth_date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('vehicle_type').value = 'MC';
+  VIOLATIONS.forEach((v, i) => {
+    const cb = document.getElementById(`v${i}`);
+    if (cb) cb.checked = false;
+    const item = document.getElementById(`vitem-${i}`);
+    if (item) item.classList.remove('checked');
+    const fi = document.getElementById(`vfine-${i}`);
+    if (fi) fi.value = v.fine;
+  });
+  recalcTotal();
+  setDefaultDateTime();
+  // setDefaultDateTime is async but fire-and-forget is fine here
+}
+
+// ===== RECORDS =====
+let activeFilter = 'all';
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderRecords();
+}
+
+async function renderRecords() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase();
+  showLoading('Naglo-load ng mga record...');
+  let tickets;
+  try { tickets = await getTickets(); } catch(e) { tickets = []; }
+  hideLoading();
+  if (q) {
+    tickets = tickets.filter(t =>
+      (t.first_name + ' ' + t.last_name).toLowerCase().includes(q) ||
+      t.tct_no.toString().includes(q) ||
+      (t.plate_no||'').toLowerCase().includes(q)
+    );
+  }
+  if (activeFilter === 'paid') tickets = tickets.filter(t => t.paid);
+  if (activeFilter === 'unpaid') tickets = tickets.filter(t => !t.paid);
+
+  const list = document.getElementById('records-list');
+  if (!tickets.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>${q || activeFilter !== 'all' ? 'Walang nahanap.' : 'Wala pang mga ticket.'}</p></div>`;
+    return;
+  }
+
+  // helper: get violation names from either old format (string[]) or new format ({name,fine}[])
+  function getViolNames(t) {
+    if (!t.violations) return [];
+    if (typeof t.violations[0] === 'string') return t.violations;
+    return t.violations.map(v => v.name);
+  }
+  function getTotalFine(t) {
+    if (t.total_fine != null) return t.total_fine;
+    if (t.violations && typeof t.violations[0] === 'object') return t.violations.reduce((s,v)=>s+(v.fine||0),0);
+    return 0;
+  }
+
+  list.innerHTML = tickets.map(t => {
+    const names = getViolNames(t);
+    const tf = getTotalFine(t);
+    return `
+    <div class="record-card" style="border-left-color:${t.paid ? '#166534' : '#CC1122'}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div class="rec-tct">TCT No. ${t.tct_no} · ${formatDate(t.date)} ${formatTime(t.time)}</div>
+        <span class="status-badge ${t.paid ? 'status-paid' : 'status-unpaid'}">${t.paid ? '✅ BAYAD' : '🔴 HINDI BAYAD'}</span>
+      </div>
+      <div class="rec-name">${t.last_name}, ${t.first_name} ${t.middle_name}</div>
+      <div class="rec-date">🏍️ ${t.vehicle_type} · ${t.plate_no || 'No Plate'} · ${t.officer_name}${tf ? ' · <strong style="color:var(--success)">₱'+tf.toLocaleString()+'</strong>' : ''}</div>
+      <div class="rec-violations">
+        ${names.slice(0,3).map(v => `<span class="violation-badge">${v.length > 30 ? v.slice(0,28)+'…' : v}</span>`).join('')}
+        ${names.length > 3 ? `<span class="violation-badge">+${names.length-3} pa</span>` : ''}
+        ${t.others_viol ? `<span class="violation-badge">${t.others_viol}</span>` : ''}
+      </div>
+      <div class="record-actions">
+        <button class="btn-small ${t.paid ? 'btn-sm-unpaid' : 'btn-sm-paid'}" onclick="togglePaid(${t.id})">
+          ${t.paid ? '🔴 Unpaid' : '✅ Bayad na'}
+        </button>
+        <button class="btn-small btn-sm-print" onclick="printTicket(${t.id})">🖨️ I-Print</button>
+        <button class="btn-small btn-sm-del" onclick="handleDelete(${t.id})">🗑️ ${currentUser && currentUser.role==='superadmin' ? 'Burahin' : 'Request Delete'}</button>
+      </div>
+    </div>
+  `}).join('');
+}
+
+async function togglePaid(id) {
+  showLoading('Ina-update...');
+  try {
+    const tickets = await getTickets();
+    const idx = tickets.findIndex(t => t.id === id);
+    if (idx === -1) { hideLoading(); return; }
+    tickets[idx].paid = !tickets[idx].paid;
+    tickets[idx].paid_at = tickets[idx].paid ? new Date().toISOString() : null;
+    await saveTickets(tickets);
+    hideLoading();
+    showToast(tickets[idx].paid ? '✅ Na-mark na BAYAD!' : '🔴 Na-mark na HINDI BAYAD.');
+    await renderRecords();
+    await renderStats();
+  } catch(e) { hideLoading(); showToast('❌ Error. Subukan ulit.'); }
+}
+
+async function checkPendingRequests() {
+  try {
+    const reqs = await getDeleteRequests();
+    const count = reqs.filter(r => r.status === 'pending').length;
+    const badge = document.getElementById('admin-tab-badge');
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline' : 'none';
+    }
+  } catch(e) {}
+}
+
+async function handleDelete(id) {
+  // Get ticket info first
+  showLoading('Naglo-load...');
+  let allTickets, ticket;
+  try {
+    allTickets = await getTickets();
+    ticket = allTickets.find(t => t.id === id);
+    hideLoading();
+  } catch(e) {
+    hideLoading();
+    showToast('❌ Error. Subukan ulit.');
+    return;
+  }
+
+  if (!ticket) { showToast('❌ Hindi mahanap ang ticket.'); return; }
+
+  const tctNo = ticket.tct_no || '';
+  const name = (ticket.last_name || '') + ', ' + (ticket.first_name || '');
+
+  // STRICT CHECK - superadmin only can directly delete
+  if (currentUser && currentUser.role === 'superadmin') {
+    if (!confirm('BURAHIN ang ticket na ito?\nTCT No. ' + tctNo + '\n' + name)) return;
+    showLoading('Binubura...');
+    try {
+      await saveTickets(allTickets.filter(t => t.id !== id));
+      // Also clean up any pending requests for this ticket
+      try {
+        const reqs = await getDeleteRequests();
+        await saveDeleteRequests(reqs.filter(r => r.ticketId !== id));
+      } catch(e) {}
+      hideLoading();
+      showToast('🗑️ Na-delete na ang ticket.');
+      await renderRecords();
+      await renderStats();
+    } catch(e) { hideLoading(); showToast('❌ Error. Subukan ulit.'); }
+
+  } else {
+    // Regular admin - REQUEST ONLY, never delete directly
+    const reason = prompt('Ilagay ang dahilan ng delete request:\n(TCT No. ' + tctNo + ' - ' + name + ')');
+    if (reason === null) return; // user cancelled
+    showLoading('Nagpapadala ng request...');
+    try {
+      const reqs = await getDeleteRequests();
+      if (reqs.find(r => r.ticketId === id && r.status === 'pending')) {
+        hideLoading();
+        showToast('⚠️ May pending na request na para sa ticket na ito.');
+        return;
+      }
+      reqs.push({
+        id: Date.now(),
+        ticketId: id,
+        tctNo: tctNo,
+        name: name,
+        reason: reason.trim() || '(walang dahilan)',
+        requestedBy: currentUser.username,
+        requestedAt: new Date().toISOString(),
+        status: 'pending'
+      });
+      await saveDeleteRequests(reqs);
+      hideLoading();
+      showToast('✅ Na-send na ang request! Hintayin ang approval ng Super Admin.');
+    } catch(e) { hideLoading(); showToast('❌ Error. Subukan ulit.'); }
+  }
+}
+
+// ===== PRINT =====
+async function printTicket(id) {
+  showLoading('Inihahanda ang print...');
+  const tickets = await getTickets();
+  hideLoading();
+  const t = tickets.find(x => x.id === id);
+  if (!t) return;
+
+  function getViolList(t) {
+    if (!t.violations || !t.violations.length) return [];
+    if (typeof t.violations[0] === 'string') return t.violations.map(n => ({name:n,fine:0}));
+    return t.violations;
+  }
+  const violList = getViolList(t);
+  const totalFine = t.total_fine != null ? t.total_fine : violList.reduce((s,v)=>s+(v.fine||0),0);
+
+  // All violation names for checkbox display
+  const allViolNames = VIOLATIONS.map(v => v.name);
+
+  document.getElementById('printDoc').innerHTML = `
+    <div class="print-header">
+      <div style="font-size:8px">Republic of the Philippines · Province of Camarines Norte</div>
+      <div style="font-size:9px;font-weight:700">Municipality of Jose Panganiban</div>
+      <div style="font-size:9px;font-weight:700">JOSE PANGANIBAN MUNICIPAL POLICE STATION</div>
+    </div>
+    <div class="print-title">TRAFFIC CITATION TICKET${t.paid ? ' <span style="color:#166534;font-size:12px">[BAYAD NA ✅]</span>' : ''}</div>
+    <div class="print-row">
+      <label>Date:</label><span>${formatDate(t.date)}</span>
+      <label>Time:</label><span>${formatTime(t.time)}</span>
+      <label>TCT No.:</label><span style="font-weight:700;color:#CC1122">${t.tct_no}</span>
+    </div>
+    <div class="print-row"><label>Name:</label><span>${t.last_name}, ${t.first_name} ${t.middle_name}</span><label>Birth Date:</label><span>${t.birth_date ? formatDate(t.birth_date) : ''}</span></div>
+    <div class="print-row"><label>Address:</label><span>${t.address}</span></div>
+    <div class="print-row">
+      <label>License No.:</label><span>${t.license_no}</span>
+      <label>Plate No.:</label><span>${t.plate_no}</span>
+      <label>Vehicle Type:</label><span>${t.vehicle_type}</span>
+    </div>
+    <div class="print-row"><label>Registered Owner:</label><span>${t.reg_owner}</span><label>Address:</label><span>${t.owner_address}</span></div>
+
+    <div class="print-violations-header">YOU ARE HEREBY CITED FOR COMMITTING THE FOLLOWING TRAFFIC ADMINISTRATIVE VIOLATION/S:</div>
+    <div class="print-viol-list">
+      ${allViolNames.map(vname => {
+        const found = violList.find(v => v.name === vname);
+        const checked = !!found;
+        const count = found && found.count > 1 ? found.count : 1;
+        const displayFine = found ? (found.total || found.fine) : 0;
+        return `<div class="print-viol-item${checked?' checked':''}">
+          <span class="print-checkbox">${checked?'✓':''}</span>
+          <span style="flex:1">${vname}${count > 1 ? ' <strong>x'+count+'</strong>' : ''}</span>
+          ${checked && displayFine ? `<span class="print-viol-fine">₱${displayFine.toLocaleString()}</span>` : ''}
+        </div>`;
+      }).join('')}
+      ${t.others_viol ? `<div class="print-viol-item checked"><span class="print-checkbox">✓</span><span style="flex:1">Others: ${t.others_viol}</span></div>` : '<div class="print-viol-item"><span class="print-checkbox"></span><span style="flex:1">Others: _______________</span></div>'}
+    </div>
+
+    ${totalFine > 0 ? `<div class="print-total-row"><span>KABUUANG MULTA:</span><span>₱${totalFine.toLocaleString('en-PH',{minimumFractionDigits:2})}</span></div>` : ''}
+
+    <div class="print-footer-note">YOU ARE HEREBY DIRECTED TO REPORT to the JOSE PANGANIBAN MUNICIPAL POLICE STATION TRAFFIC SECTION, within THREE (3) days from date of receipt hereof. Failure to do so shall mean a waiver of right and criminal action shall be instituted against you.</div>
+
+    <div class="print-sig-row">
+      <div class="print-sig-block">
+        <div class="print-sig-line"></div>
+        <div>${t.officer_name}${t.officer_badge ? ' / '+t.officer_badge : ''}</div>
+        <div><em>Apprehending Officer</em></div>
+      </div>
+      <div class="print-sig-block">
+        <div class="print-sig-line"></div>
+        <div><em>Driver/Operator</em></div>
+      </div>
+    </div>
+
+    <div class="print-copy-row">
+      <div class="print-copy-item">Original – Violator</div>
+      <div class="print-copy-item">Duplicate – Apprehending Officer</div>
+      <div class="print-copy-item">Triplicate – MTO</div>
+    </div>
+  `;
+
+  document.getElementById('printOverlay').classList.add('open');
+}
+
+function closePrint() {
+  document.getElementById('printOverlay').classList.remove('open');
+}
+
+// ===== STATS =====
+async function renderStats() {
+  let tickets;
+  try { tickets = await getTickets(); } catch(e) { tickets = []; }
+  const today = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const weekAgo = new Date(now - 7*86400000).toISOString().split('T')[0];
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+
+  const unpaidTickets = tickets.filter(t => !t.paid);
+  const paidTickets   = tickets.filter(t =>  t.paid);
+
+  function getTotalFine(t) {
+    if (t.total_fine != null) return parseFloat(t.total_fine) || 0;
+    if (t.violations && typeof t.violations[0] === 'object')
+      return t.violations.reduce((s,v) => s + (v.total || v.fine || 0), 0);
+    return 0;
+  }
+
+  const unpaidAmt = unpaidTickets.reduce((s,t) => s + getTotalFine(t), 0);
+  const paidAmt   = paidTickets.reduce((s,t)   => s + getTotalFine(t), 0);
+  const grandTotal = unpaidAmt + paidAmt;
+
+  function peso(n) { return '₱' + n.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+  document.getElementById('stat-total').textContent = tickets.length;
+  document.getElementById('stat-today').textContent = tickets.filter(t => t.date === today).length;
+  document.getElementById('stat-week').textContent = tickets.filter(t => t.date >= weekAgo).length;
+  document.getElementById('stat-month').textContent = tickets.filter(t => t.date >= monthStart).length;
+  document.getElementById('stat-unpaid').textContent = unpaidTickets.length;
+  document.getElementById('stat-paid').textContent   = paidTickets.length;
+  document.getElementById('stat-unpaid-amt').textContent = peso(unpaidAmt);
+  document.getElementById('stat-paid-amt').textContent   = peso(paidAmt);
+  document.getElementById('stat-grand-total').textContent = peso(grandTotal);
+
+  // Top violations
+  const violCount = {};
+  tickets.forEach(t => {
+    if (!t.violations) return;
+    if (typeof t.violations[0] === 'string') {
+      t.violations.forEach(v => { violCount[v] = (violCount[v]||0)+1; });
+    } else {
+      t.violations.forEach(v => { violCount[v.name] = (violCount[v.name]||0)+1; });
+    }
+  });
+  const sorted = Object.entries(violCount).sort((a,b) => b[1]-a[1]).slice(0,5);
+  document.getElementById('top-violations').innerHTML = sorted.length ? sorted.map(([v,c]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;font-size:12px">
+      <span>${v}</span>
+      <span style="background:var(--navy);color:white;border-radius:12px;padding:2px 8px;font-weight:700;font-size:11px">${c}</span>
+    </div>
+  `).join('') : '<p style="color:var(--gray);font-size:12px;text-align:center">Wala pang datos.</p>';
+
+  // Vehicle stats
+  const vtCount = {};
+  tickets.forEach(t => { vtCount[t.vehicle_type] = (vtCount[t.vehicle_type]||0)+1; });
+  document.getElementById('vehicle-stats').innerHTML = Object.entries(vtCount).map(([v,c]) => `
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:13px">
+      <span>${v}</span><span style="font-weight:700;color:var(--navy)">${c}</span>
+    </div>
+  `).join('') || '<p style="color:var(--gray);font-size:12px;text-align:center">Wala pang datos.</p>';
+}
+
+async function clearAllData() {
+  if (!confirm('BABALA: Mabubura ang LAHAT ng ticket records. Sigurado ka ba?')) return;
+  if (!confirm('PANGALAWANG PAGKUMPIRMA: Hindi na ito mababawi. Ituloy ba?')) return;
+  showLoading('Binubura ang lahat ng data...');
+  try {
+    await saveTickets([]);
+    hideLoading();
+    showToast('🗑️ Naalis na ang lahat ng data.');
+    await renderRecords();
+    await renderStats();
+  } catch(e) { hideLoading(); showToast('❌ Error. Subukan ulit.'); }
+}
+
+// ===== EXPORT =====
+async function exportData() {
+  showLoading('Ina-export sa Excel...');
+  const tickets = await getTickets();
+  hideLoading();
+  if (!tickets.length) { showToast('Walang data para i-export.'); return; }
+
+  // Build CSV rows
+  // Summary row at top
+  function pesoExport(n) { return '₱' + parseFloat(n||0).toLocaleString('en-PH', {minimumFractionDigits:2}); }
+  function getFineSummary(t) {
+    if (t.total_fine != null) return parseFloat(t.total_fine)||0;
+    if (t.violations && typeof t.violations[0]==='object') return t.violations.reduce((s,v)=>s+(v.total||v.fine||0),0);
+    return 0;
+  }
+  const unpaidTotal = tickets.filter(t=>!t.paid).reduce((s,t)=>s+getFineSummary(t),0);
+  const paidTotal   = tickets.filter(t=> t.paid).reduce((s,t)=>s+getFineSummary(t),0);
+  const grandTotal  = unpaidTotal + paidTotal;
+
+  const headers = [
+    'TCT No.', 'Petsa', 'Oras',
+    'Apelyido', 'Pangalan', 'Gitnang Pangalan', 'Petsa ng Kapanganakan', 'Address',
+    'License No.', 'Plate No.', 'Uri ng Sasakyan',
+    'Registered Owner', 'Address ng Owner',
+    'Mga Paglabag', 'Bilang ng Paglabag', 'Iba Pa (Others)',
+    'Kabuuang Multa (₱)',
+    'Status ng Bayad', 'Petsa ng Bayad',
+    'Apprehending Officer', 'Badge No.',
+    'Na-encode ni', 'Petsa ng Pag-encode'
+  ];
+
+  function esc(val) {
+    if (val == null) return '';
+    const s = String(val).replace(/"/g, '""');
+    return '"' + s + '"';
+  }
+
+  function getViolNames(t) {
+    if (!t.violations || !t.violations.length) return '';
+    if (typeof t.violations[0] === 'string') return t.violations.join('; ');
+    return t.violations.map(v => v.name + (v.count > 1 ? ' x' + v.count : '')).join('; ');
+  }
+
+  const rows = tickets.map(t => [
+    esc(t.tct_no),
+    esc(t.date),
+    esc(t.time),
+    esc(t.last_name),
+    esc(t.first_name),
+    esc(t.middle_name),
+    esc(t.birth_date),
+    esc(t.address),
+    esc(t.license_no),
+    esc(t.plate_no),
+    esc(t.vehicle_type),
+    esc(t.reg_owner),
+    esc(t.owner_address),
+    esc(getViolNames(t)),
+    esc(t.violations ? t.violations.length : 0),
+    esc(t.others_viol),
+    esc(t.total_fine || 0),
+    esc(t.paid ? 'BAYAD NA' : 'HINDI PA BAYAD'),
+    esc(t.paid_at ? t.paid_at.split('T')[0] : ''),
+    esc(t.officer_name),
+    esc(t.officer_badge),
+    esc(t.encoded_by),
+    esc(t.created_at ? t.created_at.split('T')[0] : '')
+  ].join(','));
+
+  // Summary rows
+  const summaryRows = [
+    '',
+    '"BUOD NG MGA MULTA"',
+    '"Kabuuang Hindi pa Bayad (tickets)",' + esc(tickets.filter(t=>!t.paid).length) + ',"Halaga:",' + esc(pesoExport(unpaidTotal)),
+    '"Kabuuang Bayad na (tickets)",' + esc(tickets.filter(t=>t.paid).length) + ',"Halaga:",' + esc(pesoExport(paidTotal)),
+    '"GRAND TOTAL ng Multa",,"Halaga:",' + esc(pesoExport(grandTotal)),
+  ];
+
+  // BOM for Excel to read Filipino characters correctly
+  const bom = '\uFEFF';
+  const csv = bom + headers.map(h => esc(h)).join(',') + '\n' + rows.join('\n') + '\n' + summaryRows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'TCT-LGUJPANG-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ Na-export na sa Excel!');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+
+// ===== PWA INSTALL =====
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('installBanner').style.display = 'none';
+    });
+  }
+}
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').style.display = 'none';
+  showToast('✅ Naka-install na ang app!');
+});
+</script>
+</body>
+</html>
