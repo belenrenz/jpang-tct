@@ -1104,15 +1104,30 @@ async function loginSuccess(user) {
   document.getElementById('header-username').textContent = user.username;
   if (user.role === 'superadmin') {
     document.getElementById('tab-admin').style.display = '';
-    // Check for pending delete requests and show badge
     checkPendingRequests();
   }
-  await buildViolationsGrid();
-  await setDefaultDateTime();
+
+  // 1. Show violations IMMEDIATELY with default fines (instant, no cloud wait)
+  buildViolationsGridInstant();
   updateHeader();
-  await renderRecords();
-  await renderStats();
-  if (user.role === 'superadmin') await renderAdminList();
+
+  // 2. Load everything else in parallel in background
+  Promise.all([
+    getFines().then(savedFines => {
+      if (!savedFines) return;
+      VIOLATIONS.forEach((_, i) => {
+        if (savedFines[i] != null) {
+          const el = document.getElementById('vfine-' + i);
+          if (el) el.value = savedFines[i];
+        }
+      });
+      recalcTotal();
+    }).catch(() => {}),
+    setDefaultDateTime(),
+    renderRecords(),
+    renderStats(),
+    user.role === 'superadmin' ? renderAdminList() : Promise.resolve()
+  ]);
 }
 
 function doLogout() {
@@ -1489,6 +1504,27 @@ async function setDefaultDateTime() {
     }
   } catch(e) {}
   updateHeader();
+}
+
+function buildViolationsGridInstant(savedFines = null) {
+  const grid = document.getElementById('violations-grid');
+  grid.innerHTML = VIOLATIONS.map((v, i) => {
+    const fine = (savedFines && savedFines[i] != null) ? savedFines[i] : v.fine;
+    return `
+    <div class="violation-item" id="vitem-${i}">
+      <input type="checkbox" id="v${i}" onclick="event.stopPropagation(); onViolCheck(${i})">
+      <span class="viol-name" onclick="onViolCheck(${i})">${v.name}</span>
+      <span class="viol-fine-label">₱</span>
+      <input type="number" class="viol-fine-input" id="vfine-${i}" value="${fine}" min="0" step="50"
+        onclick="event.stopPropagation()"
+        oninput="recalcTotal(); markFinesDirty()">
+      <div class="viol-counter" id="vcounter-${i}" style="display:none">
+        <button class="viol-counter-btn viol-btn-minus" onclick="event.stopPropagation(); changeCount(${i},-1)">−</button>
+        <span class="viol-count-display" id="vcount-${i}">1</span>
+        <button class="viol-counter-btn viol-btn-add" onclick="event.stopPropagation(); changeCount(${i},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 async function buildViolationsGrid() {
